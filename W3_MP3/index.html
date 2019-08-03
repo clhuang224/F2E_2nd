@@ -14,11 +14,29 @@
 <body>
     <main class="main">
         <aside class="aside">
-            <div class="menu">
-                <div class="list"></div>
-                <div class="singer"></div>
-                <div class="favorite"></div>
+            <div class="search">
+                <input class="search-input" type="text">
+                <button class="search-button"></button>
             </div>
+            <ul class="menu">
+                <li class="menu-li list active">
+                    <button class="menu-button">播放列表</button>
+                    <ul class="submenu">
+                        <li class="submenu-li active">
+                            <button class="submenu-button">工作歌單</button>
+                        </li>
+                        <li class="submenu-li">
+                            <button class="submenu-button">ANIME MUSIC</button>
+                        </li>
+                    </ul>
+                </li>
+                <li class="menu-li singer">
+                    <button class="menu-button">歌手</button>
+                </li>
+                <li class="menu-li favorite">
+                    <button class="menu-button">我的最愛</button>
+                </li>
+            </ul>
             <div class="working">
                 <button class="aside-switch">
                     <span>List</span>
@@ -26,6 +44,40 @@
                     <div class="line"></div>
                     <div class="line"></div>
                 </button>
+                <div class="title">工作歌單</div>
+                <ul class="working-list">
+                    <li class="song">
+                        <div class="row">
+                            <div class="title">黑色幽默</div>
+                            <div class="album">同名專輯</div>
+                        </div>
+                        <div class="row">
+                            <div class="singer">周杰倫</div>
+                            <div class="time">04:43</div>
+                        </div>
+                        <div class="buttons">
+                            <button class="favorite"></button>
+                            <button class="play"></button>
+                        </div>
+
+                    </li>
+                    <li class="song">
+                        <div class="row">
+                            <div class="title">讓我為你唱情歌</div>
+                            <div class="album">慾望反光</div>
+                        </div>
+                        <div class="row">
+                            <div class="singer">蕭敬騰</div>
+                            <div class="time">04:11</div>
+                        </div>
+                        <div class="buttons">
+                            <button class="favorite"></button>
+                            <button class="play"></button>
+                        </div>
+                    </li>
+
+                </ul>
+                <div class="list-image"></div>
             </div>
         </aside>
         <div class="player pause">

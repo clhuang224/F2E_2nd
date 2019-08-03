@@ -43,6 +43,7 @@ table {
 * {
     font-family: 'Noto Sans TC', sans-serif;
     box-sizing: border-box;
+    background-repeat: no-repeat;
 }
 
 button {
@@ -72,10 +73,84 @@ button {
     border: 3px solid #000;
     background-color: #fff;
     transition: 1s all;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 33px 354px 33px 8px;
 }
 
 .main.hide-aside .aside {
     transform: translateX(-560px) translateY(-50px) rotate(30deg);
+}
+
+.aside .search {
+    width: 125px;
+    height: 23px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #DFDFDF;
+    border: #000 1px solid;
+}
+
+.aside .search .search-input {
+    outline: none;
+    width: 104px;
+    height: 100%;
+    border: 0;
+    background-color: transparent;
+}
+
+.aside .search .search-button {
+    width: 27px;
+    height: 22.78px;
+    display: flex;
+    background-position: center;
+    background-size: 15px 14.78px;
+    background-color: transparent;
+    background-image: url(../img/search.png);
+}
+
+.aside .menu {
+    margin-top: 5px;
+}
+
+.aside .menu .menu-li {
+    margin-top: 17px;
+}
+
+.aside .menu .menu-li .menu-button {
+    text-align: left;
+    padding: 0;
+    width: 86px;
+    line-height: 15px;
+    font-size: 10px;
+    border-bottom: 1px solid #000;
+}
+
+.aside .menu .submenu {
+    margin-top: 5.5px;
+    display: none;
+}
+
+.aside .menu .menu-li.active .submenu {
+    display: block;
+}
+
+.aside .menu .submenu .submenu-li {
+    position: relative;
+    margin-top: 7px;
+}
+
+.aside .menu .submenu .submenu-li.active .submenu-button::before {
+    content: "";
+    width: 15px;
+    height: 17px;
+    position: absolute;
+    top: 2px;
+    left: -10px;
+    background-image: url(../img/play-black.png);
+    background-size: 15px 17px;
 }
 
 .aside .working {
@@ -114,6 +189,105 @@ button {
     background-color: #000;
 }
 
+.aside .working>.title {
+    font-size: 30px;
+    line-height: 45px;
+    margin-top: 20.14px;
+    margin-left: 28.69px;
+}
+
+.aside .working .working-list {
+    margin-top: 39px;
+    margin-left: 28.69px;
+    padding: 12.5px 0px 16.5px 0;
+    height: 474px;
+    overflow: auto;
+    width: 298px;
+}
+
+.aside .working .working-list::-webkit-scrollbar {
+    width: 10px;
+    height: 474px;
+    appearance: none;
+    border: 3px #707070 solid;
+    border-radius: 5px;
+    margin-left: 16px;
+}
+
+.aside .working .working-list::-webkit-scrollbar-thumb {
+    background-color: #646464;
+    width: 100%;
+    border: 3px #707070 solid;
+    border-radius: 5px;
+}
+
+.aside .working .working-list .song {
+    position: relative;
+    border-width: 1px 0px;
+    border-color: #000;
+    border-style: solid;
+    margin-top: -1px;
+    width: 271.84px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    font-size: 14px;
+    line-height: 20px;
+    padding: 8.5px 0px;
+}
+
+.aside .working .working-list .song:hover {
+    background-color: rgba(0, 0, 0, 0.2);
+}
+
+.aside .working .working-list .song .row {
+    display: flex;
+    justify-content: space-between;
+    width: 271.84px;
+}
+
+.aside .working .working-list .song .title {
+    font-size: 18px;
+    line-height: 27px;
+    font-weight: bold;
+}
+
+.aside .working .working-list .song .album {
+    font-size: 14px;
+    line-height: 20px;
+    color: #646464;
+}
+
+.aside .working .working-list .song .buttons {
+    display: none;
+    width: 60px;
+    justify-content: space-between;
+    align-items: center;
+    position: absolute;
+    left: 104px;
+    top: 25px;
+}
+
+.aside .working .working-list .song:hover .buttons {
+    display: flex;
+}
+.aside .working .working-list .song .favorite{
+    width: 20px;
+    height: 18px;
+    background-image: url(../img/heart-empty.png);
+    background-size: 20px 18px;
+}
+.aside .working .working-list .song .play{
+    border: #000 1px solid;
+    border-radius: 50%;
+    width: 22.24px;
+    height: 22.24px;
+    background-image: url(../img/play-perfect.png);
+    background-size: 9.79px 12.04px;
+    background-position: 6.5px center;
+}
+
+
 /* player */
 
 .player {
@@ -132,7 +306,7 @@ button {
     background-size: 26.25px 61.64px, 15.92px 63.11px;
 }
 
-.player.pause{
+.player.pause {
     background-image: none;
 }
 
@@ -152,7 +326,6 @@ button {
     justify-content: center;
     align-items: center;
     background-image: url(../img/cd.png);
-    background-repeat: no-repeat;
     background-position: center center;
 }
 
@@ -181,7 +354,6 @@ button {
     border-radius: 50%;
     position: absolute;
     background-position: center center;
-    background-repeat: no-repeat;
 }
 
 .player .next-button:before, .player .previous-button:before, .player .random-button:before, .player .play-button:before {
