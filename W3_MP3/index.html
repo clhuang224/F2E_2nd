@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="zn-TW">
+
 <head>
     <meta charset="UTF-8">
     <title>MP3 Player</title>
@@ -9,6 +10,7 @@
     <!-- css -->
     <link rel="stylesheet" href="css/all.css">
 </head>
+
 <body>
     <main class="main">
         <aside class="aside">
@@ -19,12 +21,32 @@
             </div>
             <div class="working">
                 <button class="aside-switch">
-                    <span>List</span><div class="line"></div><div class="line"></div><div class="line"></div></button>
+                    <span>List</span>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                    <div class="line"></div>
+                </button>
             </div>
         </aside>
-        <div class="player">
+        <div class="player pause">
             <div class="cd">
                 <div class="circle"></div>
+            </div>
+            <button class="previous-button"></button>
+            <button class="next-button"></button>
+            <button class="random-button"></button>
+            <button class="play-button"></button>
+            <div class="needle"></div>
+            <div class="title">黑色幽默</div>
+            <div class="singer">周杰倫</div>
+            <div class="volum">
+                <input class="volum-range" type="range" min="0">
+                <button class="mute-button"></button>
+            </div>
+            <div class="time">
+                <div class="before">00:00</div>
+                <input class="time-range" type="range" min="0">
+                <div class="after">00:00</div>
             </div>
             <div class="right"></div>
             <div class="bottom"></div>
@@ -33,4 +55,5 @@
     <script src="js/jquery-3.4.1.min.js"></script>
     <script src="js/all.js"></script>
 </body>
+
 </html>
