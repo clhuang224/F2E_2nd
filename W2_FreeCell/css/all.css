@@ -1,0 +1,631 @@
+/* reset */
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+* {
+    box-sizing: border-box;
+    font-family: 'Lato', sans-serif;
+    letter-spacing: 1px;
+}
+
+button {
+    border: 0;
+    outline: none;
+    cursor: pointer;
+}
+
+a {
+    text-decoration: none;
+}
+
+body {
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.navButton {
+    width: 120px;
+    height: 40px;
+    background-color: #222222;
+    border-radius: 50px;
+    color: #FFF;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-size: 12px;
+}
+
+.navButton:hover {
+    background-color: #FFB53E;
+}
+
+[draggable="true"] {
+    /*
+     To prevent user selecting inside the drag source
+    */
+    user-select: none;
+    -moz-user-select: none;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+}
+
+.card{
+    transition: 3s all cubic-bezier();
+}
+
+/**** .game ****/
+
+.game {
+    background-color: #E2E2E2;
+    width: 1200px;
+    height: 800px;
+    display: flex;
+    justify-content: center;
+    flex-direction: column;
+    align-items: center;
+}
+
+/** .header **/
+
+.header {
+    height: 195px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.header .logo {
+    width: 74px;
+    height: 80px;
+    background-image: url(../img/king_happy.png);
+    background-color: transparent;
+    background-size: 50px 60px;
+    background-position: center 0;
+    background-repeat: no-repeat;
+    display: flex;
+    align-items: flex-end;
+    font-weight: bold;
+    margin: 0px 23px;
+}
+
+.header .cells, .header .foundations {
+    width: 441px;
+    display: flex;
+    justify-content: space-around;
+}
+
+.header .cells .cell, .header .foundations .foundation {
+    width: 95px;
+    height: 145px;
+    border: 2px #FCFCFC solid;
+    position: relative;
+}
+
+.header .cell .card, .header .foundation .card {
+    top: -2px;
+    left: -2px;
+    position: absolute;
+    background-color: #FCFCFC;
+    border: 0.5px #BABABA solid;
+    border-radius: 5px;
+    width: 95px;
+    height: 145px;
+    background-size: 95px 145px;
+}
+
+.header .foundations .foundation {
+    background-color: #FCFCFC;
+    background-size: 35px 35px;
+    background-position: center center;
+    background-repeat: no-repeat;
+}
+
+.header .foundations .s {
+    background-image: url(../img/spade-grey.png);
+}
+
+.header .foundations .h {
+    background-image: url(../img/heart-grey.png);
+}
+
+.header .foundations .d {
+    background-image: url(../img/diamond-grey.png);
+}
+
+.header .foundations .c {
+    background-image: url(../img/club-grey.png);
+}
+
+/** main **/
+
+.main {
+    width: 970px;
+    height: 524px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.main .row {
+    height: 520px;
+    width: 95px;
+    position: relative;
+}
+
+.main .row .rectangle {
+    height: 145px;
+    width: 95px;
+    border: 2px #FCFCFC solid;
+    border-radius: 5px;
+    z-index: 1;
+}
+
+.main .row .card {
+    background-color: #FCFCFC;
+    border: 0.5px #BABABA solid;
+    height: 145px;
+    width: 95px;
+    border-radius: 5px;
+    position: absolute;
+    z-index: 2;
+    background-size: 95px 145px;
+}
+
+.main .row .rectangle~.card {
+    top: 0px;
+}
+
+.main .row .card~.card {
+    top: 25px;
+}
+
+.main .row .card~.card~.card {
+    top: 50px;
+}
+
+.main .row .card~.card~.card~.card {
+    top: 75px;
+}
+
+.main .row .card~.card~.card~.card~.card {
+    top: 100px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card {
+    top: 125px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card {
+    top: 125px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card~.card {
+    top: 150px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card~.card~.card {
+    top: 175px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card~.card~.card~.card {
+    top: 200px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card~.card~.card~.card~.card {
+    top: 225px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card {
+    top: 250px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card {
+    top: 275px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card {
+    top: 300px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card {
+    top: 325px;
+}
+
+.main .row .card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card~.card {
+    top: 350px;
+}
+
+#s1 {
+    background-image: url(../img/S1.png);
+}
+
+#s2 {
+    background-image: url(../img/S2.png);
+}
+
+#s3 {
+    background-image: url(../img/S3.png);
+}
+
+#s4 {
+    background-image: url(../img/S4.png);
+}
+
+#s5 {
+    background-image: url(../img/S5.png);
+}
+
+#s6 {
+    background-image: url(../img/S6.png);
+}
+
+#s7 {
+    background-image: url(../img/S7.png);
+}
+
+#s8 {
+    background-image: url(../img/S8.png);
+}
+
+#s9 {
+    background-image: url(../img/S9.png);
+}
+
+#s10 {
+    background-image: url(../img/S10.png);
+}
+
+#s11 {
+    background-image: url(../img/S11.png);
+}
+
+#s12 {
+    background-image: url(../img/S12.png);
+}
+
+#s13 {
+    background-image: url(../img/S13.png);
+}
+
+#h1 {
+    background-image: url(../img/H1.png);
+}
+
+#h2 {
+    background-image: url(../img/H2.png);
+}
+
+#h3 {
+    background-image: url(../img/H3.png);
+}
+
+#h4 {
+    background-image: url(../img/H4.png);
+}
+
+#h5 {
+    background-image: url(../img/H5.png);
+}
+
+#h6 {
+    background-image: url(../img/H6.png);
+}
+
+#h7 {
+    background-image: url(../img/H7.png);
+}
+
+#h8 {
+    background-image: url(../img/H8.png);
+}
+
+#h9 {
+    background-image: url(../img/H9.png);
+}
+
+#h10 {
+    background-image: url(../img/H10.png);
+}
+
+#h11 {
+    background-image: url(../img/H11.png);
+}
+
+#h12 {
+    background-image: url(../img/H12.png);
+}
+
+#h13 {
+    background-image: url(../img/H13.png);
+}
+
+#d1 {
+    background-image: url(../img/D1.png);
+}
+
+#d2 {
+    background-image: url(../img/D2.png);
+}
+
+#d3 {
+    background-image: url(../img/D3.png);
+}
+
+#d4 {
+    background-image: url(../img/D4.png);
+}
+
+#d5 {
+    background-image: url(../img/D5.png);
+}
+
+#d6 {
+    background-image: url(../img/D6.png);
+}
+
+#d7 {
+    background-image: url(../img/D7.png);
+}
+
+#d8 {
+    background-image: url(../img/D8.png);
+}
+
+#d9 {
+    background-image: url(../img/D9.png);
+}
+
+#d10 {
+    background-image: url(../img/D10.png);
+}
+
+#d11 {
+    background-image: url(../img/D11.png);
+}
+
+#d12 {
+    background-image: url(../img/D12.png);
+}
+
+#d13 {
+    background-image: url(../img/D13.png);
+}
+
+#c1 {
+    background-image: url(../img/C1.png);
+}
+
+#c2 {
+    background-image: url(../img/C2.png);
+}
+
+#c3 {
+    background-image: url(../img/C3.png);
+}
+
+#c4 {
+    background-image: url(../img/C4.png);
+}
+
+#c5 {
+    background-image: url(../img/C5.png);
+}
+
+#c6 {
+    background-image: url(../img/C6.png);
+}
+
+#c7 {
+    background-image: url(../img/C7.png);
+}
+
+#c8 {
+    background-image: url(../img/C8.png);
+}
+
+#c9 {
+    background-image: url(../img/C9.png);
+}
+
+#c10 {
+    background-image: url(../img/C10.png);
+}
+
+#c11 {
+    background-image: url(../img/C11.png);
+}
+
+#c12 {
+    background-image: url(../img/C12.png);
+}
+
+#c13 {
+    background-image: url(../img/C13.png);
+}
+
+/** footer **/
+
+.footer {
+    border-top: 1px #CCCCCC solid;
+    height: 80px;
+    width: 1000px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.footer .information {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    font-weight: bold;
+}
+
+.footer .information .ruleButton {
+    width: 40px;
+    height: 40px;
+    background-image: url(../img/info.png);
+    background-size: 40px 40px;
+    background-position: center center;
+    border: 2px #222222 solid;
+    border-radius: 50%;
+}
+
+.footer .information .time, .footer .information .score {
+    margin: 0px 10px;
+}
+
+.footer .navigation {
+    width: 525px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
+/**** alerts ****/
+
+.alerts {
+    display: none;
+    width: 1200px;
+    height: 800px;
+    background-color: rgba(34, 34, 34, 0.7);
+    justify-content: center;
+    align-items: center;
+}
+
+.alerts>.win, .alerts>.lose, .alerts>.newGame, .alerts>.rule {
+    width: 600px;
+    background-color: #FCFCFC;
+    border-radius: 10px;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    padding: 10px 37px 50px 60px;
+}
+
+.alerts .navButton {
+    width: 150px;
+}
+
+.alerts .close {
+    margin-left: 490px;
+    width: 40px;
+    height: 40px;
+    color: #222222;
+    background-color: transparent;
+    font-size: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.alerts .logo {
+    width: 50px;
+    height: 60px;
+    background-size: 50px 60px;
+    background-repeat: no-repeat;
+}
+
+.alerts .title {
+    height: 25px;
+    font-size: 20px;
+    font-weight: bold;
+    margin-top: 15px;
+}
+
+.alerts .text {
+    font-size: 14px;
+    margin-top: 20px;
+    line-height: 24px;
+    height: 20px;
+    padding-right: 17px;
+}
+
+.alerts .buttons {
+    display: flex;
+    justify-content: space-around;
+    margin-top: 50px;
+}
+
+.alerts .text::-webkit-scrollbar {
+    width: 6px;
+    background-color: transparent;
+}
+
+.alerts .text::-webkit-scrollbar-thumb {
+    background-color: #DDDDDD;
+}
+
+.alerts>.win .logo {
+    background-image: url(../img/king_joy.png);
+}
+
+.alerts>.win .buttons {
+    width: 315px;
+}
+
+.alerts>.lose .logo {
+    background-image: url(../img/king_sad.png);
+}
+
+.alerts>.lose .buttons {
+    width: 480px;
+}
+
+.alerts>.newGame .logo {
+    background-image: url(../img/king_angry.png);
+}
+
+.alerts>.rule .logo {
+    background-image: url(../img/king_happy.png);
+}
+
+.alerts>.rule .text {
+    height: 300px;
+    overflow-x: hidden;
+    overflow-y: scroll;
+}
+
+.card.hint{
+    border: #FFB53E 3px solid;
+}

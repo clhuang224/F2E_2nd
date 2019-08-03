@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <title>POMODORO</title>
+    <link rel="shortcut icon" href="img/play-pink.png" type="image/x-icon">
+    <meta name="author" content="Lynn">
+    <meta name="copyright" content="Lynn">
+    <meta name="description" content="用番茄鐘做好時間管理！">
+    <meta property="og:title" content="POMODORO">
+    <meta property="og:url" content="https://clhuang224.github.io/F2E_2nd_W1_Pomodoro/">
+    <meta property="og:image" content="img/play-pink.png">
+    <meta property="og:description" content="用番茄鐘做好時間管理！">
+    <!-- CSS -->
+    <link rel="stylesheet" href="css/all.css">
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC|Roboto&display=swap" rel="stylesheet">
+</head>
+
+<body>
+    <audio class="work" src="music/ring.mp3"></audio>
+    <audio class="break" src="music/alarm.mp3"></audio>
+    <div class="wrap">
+        <!-- 左大塊（顯示timer或window） -->
+        <div class="timer">
+
+            <div class="content">
+                <form class="addMission">
+                    <input class="addInput" type="text" placeholder="ADD A NEW MISSON...">
+                    <button class="addButton">＋</button>
+                </form>
+                <div class="empty">to-do list is empty</div>
+                <div class="notEmpty">
+                    <div class="currentMission">
+                        <div class="listCircle"></div>
+                        <div class="container">
+                            <h2></h2>
+                            <div class="tomato"></div>
+                        </div>
+                    </div>
+                    <div class="time"></div>
+                    <ul class="todolist"></ul>
+                    <div class="container"><a class="more">MORE</a></div>
+                </div>
+            </div>
+            <div class="play">
+                <div class="sector">
+                    <div class="circle">
+                        <button class="playButton"></button>
+                        <button class="pauseButton"></button>
+                        <div class="finish"></div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="window">
+            <div class="left">
+                <ul class="menu">
+                    <li>
+                        <button class="todolist">
+                            <div class="sign"></div>
+                            <div class="text">TO-DO LIST</div>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="analytics">
+                            <div class="sign"></div>
+                            <div class="text">ANALYTICS</div>
+                        </button>
+                    </li>
+                    <li>
+                        <button class="ringtones">
+                            <div class="sign"></div>
+                            <div class="text">RINGTONES</div>
+                        </button>
+                    </li>
+                </ul>
+                <div class="bottom">
+                    <div class="halfCircle"></div>
+                    <div class="play">
+                        <div class="sector">
+                            <button class="playButton"></button>
+                            <button class="pauseButton"></button>
+                        </div>
+                    </div>
+                    <div class="information">
+                        <div class="time"></div>
+                        <div class="currentMission"></div>
+                    </div>
+
+                </div>
+            </div>
+            <!-- window的右邊區塊（顯示todolist或analytics或ringtones） -->
+            <div class="todolist">
+                <form class="addMission">
+                    <input class="addInput" type="text" placeholder="ADD A NEW MISSON...">
+                    <button class="addButton">＋</button>
+                </form>
+                <button class="dropdownButton"><span class="title">TO-DO</span><span class="sign"></span></button>
+                <ul class="dropdownList currentMission">
+                    <!-- 產生待辦事項的li -->
+                    <!-- 打勾之後要重刷資料 會移到done去 -->
+                </ul>
+                <button class="dropdownButton"><span class="title">DONE</span><span class="sign"></span></button>
+                <ul class="dropdownList doneMission">
+                    <!-- 產生待辦事項的li -->
+                    <!-- 打勾之後要重刷資料 會移到done去 -->
+                </ul>
+            </div>
+            <div class="analytics">
+                <h3 class="head">FOCUS TIME</h3>
+                <div class="focus">
+                    <div class="today">
+                        <h4 class="head">TODAY</h4>
+                        <div class="amount">
+                            <span class="number">20</span>
+                            <span class="tomato">/TOMATO</span>
+                        </div>
+
+                    </div>
+                    <div class="week">
+                        <h4 class="head">WEEK</h4>
+                        <div class="amount"><span class="number">108</span>
+                            <span class="tomato">/TOMATO</span></div>
+                    </div>
+                </div>
+                <h3 class="head">
+                    <div>CHART</div>
+                    <div class="date">
+                        <button class="leftArrow">
+                            <</button> <span class="from">2019.7.1</span>
+                                -
+                                <span class="to">2019.7.7</span>
+                                <button class="rightArrow">></button>
+                    </div>
+                </h3>
+                <div class="chart">
+                    <div class="container">
+                        <div class="left">
+                            <div class="amount">24</div>
+                            <div class="amount">20</div>
+                            <div class="amount">16</div>
+                            <div class="amount">12</div>
+                            <div class="amount">8</div>
+                            <div class="amount">4</div>
+                        </div>
+                        <div class="graph">
+                            <div class="bar">
+                                <div class="barAmount"></div>
+                            </div>
+                            <div class="bar">
+                                <div class="barAmount"></div>
+                            </div>
+                            <div class="bar">
+                                <div class="barAmount"></div>
+                            </div>
+                            <div class="bar">
+                                <div class="barAmount"></div>
+                            </div>
+                            <div class="bar">
+                                <div class="barAmount"></div>
+                            </div>
+                            <div class="bar">
+                                <div class="barAmount"></div>
+                            </div>
+                            <div class="bar">
+                                <div class="barAmount"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="bottom">
+                        <div class="date">7/1</div>
+                        <div class="date">7/2</div>
+                        <div class="date">7/3</div>
+                        <div class="date">7/4</div>
+                        <div class="date">7/5</div>
+                        <div class="date">7/6</div>
+                        <div class="date">7/7</div>
+                    </div>
+                </div>
+            </div>
+            <div class="ringtones">
+                <h3 class="head">WORK</h3>
+                <ul class="work">
+                </ul>
+
+                <h3 class="head">BREAK</h3>
+                <ul class="break">
+                </ul>
+            </div>
+            <!-- // window的右邊區塊（顯示todolist或analytics或ringtones） -->
+        </div>
+        <!-- //左大塊（顯示timer或window） -->
+        <header>
+            <!-- timer時顯示menu window時顯示X -->
+            <ul class="menu">
+                <li><button class="todolist"></button></li>
+                <li><button class="analytics"></button></li>
+                <li><button class="ringtones"></button></li>
+                <li><button class="close">╳</button></li>
+            </ul>
+            <h1>POMODORO</h1>
+        </header>
+    </div>
+
+
+    <!-- JavaScript -->
+    <script src="js/all.js"></script>
+</body>
+
+</html>

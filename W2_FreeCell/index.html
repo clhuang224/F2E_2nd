@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <title>FreeCell</title>
+    <link rel="shortcut icon" href="img/icon.png" type="image/x-icon">
+    <meta name="author" content="Lynn">
+    <meta name="copyright" content="Lynn">
+    <meta name="description" content="一起來玩新接龍！">
+    <meta property="og:title" content="FreeCell">
+    <meta property="og:url" content="https://clhuang224.github.io/F2E_2nd_W2_FreeCell/">
+    <meta property="og:description" content="一起來玩新接龍！">
+    <!-- font -->
+    <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+    <!-- css -->
+    <link rel="stylesheet" href="css/all.css">
+</head>
+
+<body>
+    <div class="game">
+        <header class="header">
+            <div class="cells">
+                <div class="cell" data-role="drag-drop-container" id="cell1"></div>
+                <div class="cell" data-role="drag-drop-container" id="cell2"></div>
+                <div class="cell" data-role="drag-drop-container" id="cell3"></div>
+                <div class="cell" data-role="drag-drop-container" id="cell4"></div>
+            </div>
+            <div class="logo">FREECELL</div>
+            <div class="foundations">
+                <div class="foundation s" data-role="drag-drop-container" id="foundation1"></div>
+                <div class="foundation h" data-role="drag-drop-container" id="foundation2"></div>
+                <div class="foundation d" data-role="drag-drop-container" id="foundation3"></div>
+                <div class="foundation c" data-role="drag-drop-container" id="foundation4"></div>
+            </div>
+        </header>
+        <main class="main">
+            <div class="row" data-role="drag-drop-container" id="row1"></div>
+            <div class="row" data-role="drag-drop-container" id="row2"></div>
+            <div class="row" data-role="drag-drop-container" id="row3"></div>
+            <div class="row" data-role="drag-drop-container" id="row4"></div>
+            <div class="row" data-role="drag-drop-container" id="row5"></div>
+            <div class="row" data-role="drag-drop-container" id="row6"></div>
+            <div class="row" data-role="drag-drop-container" id="row7"></div>
+            <div class="row" data-role="drag-drop-container" id="row8"></div>
+        </main>
+        <footer class="footer">
+            <div class="information">
+                <button class="ruleButton"></button>
+                <div class="time">TIME: <span class="value"></span></div>
+                <div class="score">SCORE: <span class="value"></span></div>
+            </div>
+            <nav class="navigation">
+                <button class="navButton newGame">NEW GAME</button>
+                <button class="navButton restart">RESTART</button>
+                <button class="navButton hint">HINT</button>
+                <button class="navButton undo">UNDO</button>
+            </nav>
+        </footer>
+    </div>
+    <div class="alerts">
+        <div class="win">
+            <button class="close">×</button>
+            <div class="logo"></div>
+            <h3 class="title">CONGRATULATIONS!</h3>
+            <div class="text">You win the game!</div>
+            <div class="buttons">
+                <button class="navButton restart">PLAY AGAIN</button>
+                <button class="navButton newGame">NEW GAME</button>
+            </div>
+        </div>
+        <div class="lose">
+            <button class="close">×</button>
+            <div class="logo"></div>
+            <h3 class="title">NO MORE MOVES</h3>
+            <div class="text">There are no moves available.</div>
+            <div class="buttons">
+                <button class="navButton restart">RESTART</button>
+                <button class="navButton newGame">NEW GAME</button>
+                <button class="navButton undo">UNDO</button>
+            </div>
+        </div>
+        <div class="newGame">
+            <button class="close">x</button>
+            <div class="logo"></div>
+            <h3 class="title">START A NEW GAME</h3>
+            <div class="text">Are you sure you want to give up?</div>
+            <div class="buttons">
+                <button class="navButton newGame">NEW GAME</button>
+            </div>
+        </div>
+        <div class="rule">
+            <button class="close">×</button>
+            <div class="logo"></div>
+            <h3 class="title">FREECELL RULE</h3>
+            <div class="text">The object of the game is to build up all cards on foundations from Ace to King by
+                following suit. You win when all 52 cards are moved there, 13 to a pile. <br><br> Top cards of tableau
+                piles
+                and cards from Cells are available to play. You can build tableau piles down by alternating color.
+                Only one card at a time can be moved. The top card of any tableau pile can also be moved to any
+                Cell. Each Cell (or Reserve space) may contain only one card. Cards in the cells can be moved to the
+                foundation piles or back to the tableau piles, if possible. <br><br> The rules state that you can move
+                only
+                one card at a time, but you can move group of cards in the proper sequence if you have enough free
+                (empty) Cells and/or tableau piles.</div>
+        </div>
+    </div>
+    <!-- js -->
+    <script src="js/all.js"></script>
+</body>
+
+</html>

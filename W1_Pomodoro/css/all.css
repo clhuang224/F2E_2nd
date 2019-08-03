@@ -1,0 +1,873 @@
+/****** Reset ******/
+
+/* http://meyerweb.com/eric/tools/css/reset/ 
+   v2.0 | 20110126
+   License: none (public domain)
+*/
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+/* HTML5 display-role reset for older browsers */
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+    padding: 5px;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+* {
+    box-sizing: border-box;
+    padding: 0;
+    margin: 0;
+    border: 0;
+    font-family: 'Roboto', sans-serif;
+    font-weight: bold;
+    text-transform: uppercase;
+}
+
+body {
+    display: flex;
+    justify-content: center;
+    color: #003164;
+}
+
+a {
+    text-decoration: none;
+}
+
+button {
+    outline: none;
+    cursor: pointer;
+}
+
+/********** wrap **********/
+
+.wrap {
+    display: flex;
+    width: 1280px;
+    justify-content: center;
+    overflow: hidden;
+}
+/******** timer ********/
+
+.timer {
+    /* display: none; */
+    display: flex;
+    justify-content: center;
+    width: 86.9375%;
+    background-color: #FFEDF7;
+    background-image: linear-gradient(to right, #FFEDF7 75.4545%, #003164 24.5455%);
+}
+/****** content ******/
+.timer .content {
+    width: 50.9091%;
+    height: 800px;
+    padding-left: 80px;
+}
+
+.timer .content .addMission {
+    margin-left: 5px;
+}
+
+.addMission {
+    display: flex;
+    justify-content: flex-start;
+}
+
+.addMission .addInput {
+    width: 405px;
+    height: 56px;
+    color: #FF4384;
+    font-size: 16px;
+    font-weight: bold;
+    font-style: italic;
+    background-color: #fff;
+    margin: 48px 0px 0px 0px;
+    padding-left: 16px;
+    outline: none;
+}
+
+.addMission .addInput::placeholder {
+    color: #FF4384;
+}
+
+.addMission .addInput::placeholder {
+    color: #FF4384;
+}
+
+.addMission .addInput:focus::placeholder {
+    color: transparent;
+}
+
+.addMission .addButton {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 48px;
+    color: #FF4384;
+    font-size: 16px;
+    width: 40px;
+    height: 56px;
+    background-color: #fff;
+}
+
+.timer .content .empty{
+    display: none;
+    height: 540px;
+    width: 445px;
+    margin-top: 26px;
+    font-size: 36px;
+    color: #FF4384;
+    line-height: 540px;
+    text-align: center;
+}
+
+.timer .content .currentMission {
+    display: flex;
+    justify-content: flex-start;
+    margin: 145px 0px 0px 5px;
+    width: 412px;
+    height: 48px;
+}
+
+.timer .content .currentMission .listCircle {
+    width: 44px;
+    height: 44px;
+    border: #003164 2px solid;
+    border-radius: 50%;
+}
+
+.timer .content .currentMission .container {
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+}
+
+.timer .content .currentMission h2 {
+    font-size: 24px;
+    line-height: 28px;
+    font-weight: bold;
+    color: #003164;
+    margin-left: 16px;
+}
+
+.timer .content .currentMission .tomato {
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-start;
+    height: 16px;
+    margin-left: 16px;
+}
+
+.timer .content .currentMission .tomato .circle {
+    width: 12px;
+    height: 12px;
+    border: #FF4384 1px solid;
+    border-radius: 50%;
+    background-color: #FF4384;
+    margin-right: 8px;
+}
+
+.timer .content .time {
+    width: 454px;
+    padding: 15px 0px;
+    font-size: 176px;
+    font-weight: bold;
+    color: #FF4384;
+}
+
+.timer .content .todolist {
+    margin: 98px 0px 0px 5px;
+    width: 445px;
+}
+
+.timer .content .todolist li {
+    display: flex;
+    justify-content: space-between;
+    padding-bottom: 8px;
+    border-bottom: 1px solid rgba(0, 49, 100, 0.2);
+    margin-top: 9px;
+}
+
+.timer .content .todolist li .listCircle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    border: #003164 solid 2px;
+}
+
+.timer .content .todolist li p {
+    display: block;
+    width: 389px;
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: bold;
+}
+
+.timer .content .todolist li .button {
+    width: 24px;
+    height: 24px;
+    background-color: transparent;
+    background-image: url('../img/play-outline.png');
+    background-size: 24px 24px;
+}
+
+.timer .content .container {
+    margin-top: 9px;
+    width: 445px;
+    display: flex;
+    justify-content: flex-end;
+}
+
+.timer .content .container .more {
+    color: #FF4384;
+    font-weight: bold;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.timer .play {
+    min-width: 540px;
+    height: 540px;
+    border: #FF4384 4px solid;
+    border-radius: 50%;
+    margin-top: 130px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timer .play .sector {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.timer .play .sector .circle {
+    min-width: 502px;
+    height: 502px;
+    border: #FF4384 4px solid;
+    border-radius: 50%;
+    background-color: #FF4384;
+    position: relative;
+}
+
+.timer .play.playing .sector .circle {
+    background-color: #fff;
+}
+
+.timer .play .playButton, .timer .play .pauseButton {
+    position: absolute;
+    width: 96px;
+    height: 96px;
+    left: 203px;
+    top: 203px;
+    background-size: 96px 96px;
+    background-color: transparent;
+}
+
+.timer .play .playButton {
+    background-image: url('../img/play-white.png');
+}
+
+.timer .play .pauseButton {
+    display: none;
+    background-image: url('../img/pause-pink.png');
+}
+
+.timer .play .finish {
+    background-color: #fff;
+    position: absolute;
+    width: 24px;
+    height: 24px;
+    border: #FF4384 5px solid;
+    left: 299px;
+    top: 275px;
+    cursor: pointer;
+}
+
+.timer .play .finish:active {
+    background-color: #FF4384;
+    border-color: #FFF;
+    border-width: 4px;
+}
+
+.timer .play.playing .finish {
+    background-color: #FF4384;
+    border-color: #fff;
+}
+
+/******** window ********/
+
+.window {
+    display: none;
+    /* display: flex; */
+    justify-content: center;
+    width: 86.9375%;
+    background-color: #003164;
+}
+
+/****** window>left ******/
+
+.window .left {
+    width: 435px;
+    height: 800px;
+}
+
+.window .left .menu {
+    margin-top: 3px;
+    margin-left: 85px;
+}
+
+.window .left .menu li {
+    margin-top: 42px;
+    height: 42px;
+}
+
+.window .left .menu button {
+    display: flex;
+    justify-content: flex-start;
+    padding: 0;
+    height: 42px;
+    font-size: 36px;
+    line-height: 42px;
+    background: 0;
+}
+
+.window .left .menu .sign {
+    display: block;
+    width: 36px;
+    height: 36px;
+    background-size: 36px 36px;
+    background-color: transparent;
+}
+
+.window .left .menu .todolist .sign {
+    background-image: url('../img/todolist-dark.png');
+}
+
+.window .left .menu .todolist.active .sign {
+    background-image: url('../img/todolist-pink.png');
+}
+
+.window .left .menu .analytics .sign {
+    background-image: url('../img/analytics-dark.png');
+}
+
+.window .left .menu .analytics.active .sign {
+    background-image: url('../img/analytics-pink.png');
+}
+
+.window .left .menu .ringtones .sign {
+    background-image: url('../img/ringtones-dark.png');
+}
+
+.window .left .menu .ringtones.active .sign {
+    background-image: url('../img/ringtones-pink.png');
+}
+
+.window .left .menu button .text {
+    width: 198px;
+    height: 42px;
+    color: #335a83;
+    margin-left: 8px;
+}
+
+.window .left .menu button.active .text {
+    color: #FF4384;
+}
+
+.window .left .bottom {
+    margin-top: 318px;
+    margin-left: 85px;
+    position: relative;
+    height: 291px;
+    width: 100%;
+}
+
+.window .left .bottom .play {
+    position: absolute;
+    width: 116px;
+    height: 116px;
+    border-radius: 50%;
+    background-color: #003164;
+    top: 0;
+    left: 117px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.window .left .bottom .play .sector {
+    width: 104px;
+    height: 104px;
+    background-color: transparent;
+    border: #FF4384 2px solid;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.window .left .bottom .play .playButton, .window .left .bottom .play .pauseButton {
+    width: 90px;
+    height: 90px;
+    background-size: 90px 90px;
+    background-color: transparent;
+}
+
+.window .left .bottom .play .playButton {
+    background-image: url('../img/play-pink.png');
+}
+
+.window .left .bottom .play .pauseButton {
+    display: none;
+    background-image: url('../img/pause-white.png'), radial-gradient(#FF4384 50%, transparent 50%);
+}
+
+.window .left .bottom .halfCircle {
+    position: absolute;
+    width: 350px;
+    height: 350px;
+    border-radius: 50%;
+    background-color: #FFEDF7;
+    top: 58px;
+}
+
+.window .left .bottom .information {
+    position: absolute;
+    top: 116px;
+    display: flex;
+    width: 350px;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.window .left .bottom .information .time {
+    margin-top: 4px;
+    font-size: 64px;
+    font-weight: bold;
+    color: #FF4384;
+    text-align: center;
+}
+
+.window .left .bottom .information .currentMission {
+    font-weight: bold;
+    font-size: 16px;
+    overflow: hidden;
+    width: 350px;
+    height: 19px;
+    margin-top: 5px;
+    padding: 0px 5px;
+    text-align: center;
+}
+
+/****** window>todolist ******/
+
+.window .todolist {
+    display: none;
+    width: 765px;
+    padding-left: 125px;
+}
+
+.window .todolist .dropdownButton {
+    color: #FFF;
+    background-color: #335a83;
+    width: 445px;
+    height: 44px;
+    border: 0;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 0px 16px;
+    margin-top: 48px;
+}
+
+.window .todolist .dropdownButton .title {
+    font-weight: bold;
+    font-size: 24px;
+}
+
+.window .todolist .dropdownButton .sign {
+    width: 0;
+    height: 0;
+    border-style: solid;
+    border-width: 6px 6px 0 6px;
+    border-color: #ffffff transparent transparent transparent;
+    line-height: 0px;
+    border-color: #ffffff transparent transparent transparent;
+    filter: progid:DXImageTransform.Microsoft.Chroma(color='transparent');
+    margin: 6px;
+}
+
+/****** window>analytics ******/
+
+.window .analytics {
+    display: none;
+    width: 765px;
+    padding-left: 125px;
+}
+
+.window .analytics .head, .window .ringtones .head {
+    color: #FFF;
+    background-color: #335a83;
+    width: 445px;
+    height: 44px;
+    border: 0;
+    padding: 0px 16px;
+    margin-top: 48px;
+    line-height: 44px;
+    font-size: 24px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.window .analytics .head .date {
+    font-size: 16px;
+}
+
+.window .analytics .head .leftArrow, .window .analytics .head .rightArrow {
+    background-color: transparent;
+    border: 0;
+    color: #FFF;
+    font-family: 'Consolas';
+    padding: 8px;
+    font-weight: bold;
+    font-size: 16px;
+}
+
+.window .analytics .head .from, .window .analytics .head .to {
+    padding: 8px;
+}
+
+.window .analytics .focus {
+    width: 445px;
+    display: flex;
+    justify-content: space-between;
+}
+
+.window .analytics .focus .head {
+    margin: 0;
+    padding: 0;
+    background-color: transparent;
+    font-size: 16px;
+}
+
+.window .analytics .focus .today {
+    width: 35%;
+}
+
+.window .analytics .focus .week {
+    width: 42.9213%;
+}
+
+.window .analytics .focus .amount .number {
+    font-size: 64px;
+    color: #FF4384;
+    padding: 4px 0px 7px 0px;
+}
+
+.window .analytics .focus .amount .tomato {
+    font-size: 16px;
+    color: #335a83;
+    margin-left: 8px;
+}
+
+.window .analytics .chart {
+    color: #FFF;
+    height: initial;
+}
+
+.window .analytics .chart .container {
+    display: flex;
+    justify-content: flex-start;
+    height: initial;
+    margin-top: 16px;
+    align-items: flex-end;
+}
+
+.window .analytics .chart .left {
+    width: 25px;
+    font-size: 16px;
+    height: 240px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    margin-bottom: 9px;
+}
+
+.window .analytics .chart .left .amount {
+    margin-bottom: 20px;
+    height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.window .analytics .chart .graph {
+    width: 419px;
+    height: 232px;
+    border: #FFF solid 1px;
+    border-top: 0;
+    border-right: 0;
+    display: flex;
+    justify-content: space-evenly;
+    align-items: flex-end;
+}
+
+.window .analytics .chart .bar {
+    width: 30px;
+    height: 228px;
+    display: flex;
+    align-items: flex-end;
+}
+
+.window .analytics .chart .bar .barAmount {
+    box-sizing: initial;
+    background-color: #fff;
+    width: 100px;
+    height: 16.7%;
+}
+
+.window .analytics .chart .bottom {
+    width: 419px;
+    margin: 16.5px 0 0 25px;
+    display: flex;
+    justify-content: space-evenly;
+}
+
+.window .analytics .chart .bottom .date {
+    width: 30px;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+/****** window>ringtones ******/
+
+.window .ringtones {
+    display: none;
+    width: 765px;
+    padding-left: 125px;
+}
+
+.window .ringtones * {
+    color: #FFF;
+}
+
+.window .ringtones .work, .window .ringtones .break {
+    display: flex;
+    justify-content: flex-start;
+    width: 445px;
+    flex-wrap: wrap;
+}
+
+.window .ringtones .radio {
+    width: 33%;
+    margin-top: 16px;
+}
+
+.window .ringtones .radio button {
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: transparent;
+    border: 0;
+    font-size: 16px;
+}
+
+.window .ringtones .radio button .radioCircle {
+    width: 18px;
+    height: 18px;
+    border-radius: 50%;
+    border: #FFF 2px solid;
+    margin: 2px 6px 2px 2px;
+}
+
+.window .ringtones .radio button.checked .radioCircle {
+    background-image: radial-gradient(#FF4384 5px, transparent 4px);
+    border-color: #FF4384;
+}
+
+/******** header ********/
+
+header {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    flex-direction: column;
+    width: 14.0625%;
+    height: 800px;
+    background-color: #003164;
+}
+
+header .menu {
+    width: 36px;
+    margin-right: 85px;
+}
+
+header .menu li {
+    margin-top: 48px;
+}
+
+header .menu li button {
+    width: 36px;
+    height: 36px;
+    background-size: 36px 36px;
+    background-color: transparent;
+    color: #FFF;
+    font-size: 36px;
+    font-weight: bold;
+}
+
+header .menu .todolist {
+    background-image: url('../img/todolist-white.png');
+}
+
+header .menu .analytics {
+    background-image: url('../img/analytics-white.png');
+}
+
+header .menu .ringtones {
+    background-image: url('../img/ringtones-white.png');
+}
+
+header .menu .close {
+    display: none;
+}
+
+header h1 {
+    font-size: 24px;
+    line-height: 36px;
+    font-weight: bold;
+    color: #FFF;
+    transform-origin: 100% 0;
+    transform: rotate(90deg) translateX(121px);
+    padding: 85px 48px 0px 0px;
+    width: 165px;
+}
+
+/* .wrap.break */
+
+
+.wrap.break .addMission .addInput{
+    color: #00A7FF;
+}
+
+.wrap.break .addMission .addInput::placeholder {
+    color: #00A7FF;
+}
+
+.wrap.break .addMission .addInput::placeholder {
+    color: #00A7FF;
+}
+
+.wrap.break .addMission .addButton{
+    color: #00A7FF;
+}
+
+.wrap.break .timer .content .currentMission .tomato .circle{
+    border-color: #00A7FF;
+    background-color: #00A7FF;
+}
+
+.wrap.break .timer .content .time{
+    color: #00A7FF;
+}
+
+.wrap.break .timer .content .container .more{
+    color: #00A7FF;
+}
+
+.wrap.break .timer .play{
+    border-color: #00A7FF;
+}
+
+.wrap.break .timer .play .sector .circle{
+    border-color: #00A7FF;
+    background-color: #00A7FF;
+}
+
+.wrap.break .timer .play.playing .sector .circle {
+    background-color: #fff;
+}
+
+.wrap.break .timer .play .pauseButton{
+    background-image: url('../img/pause-blue.png');
+}
+
+.wrap.break .timer .play .finish{
+    border-color: #00A7FF;
+}
+
+.wrap.break .timer .play .finish:active,
+.wrap.break .timer .play.playing .finish{
+    background-color: #00A7FF;
+    border-color: #FFF;
+}
+
+.wrap.break .window .left .menu .todolist.active .sign {
+    background-image: url('../img/todolist-blue.png');
+}
+.wrap.break .window .left .menu .analytics.active .sign {
+    background-image: url('../img/analytics-blue.png');
+}
+.wrap.break .window .left .menu .ringtones.active .sign {
+    background-image: url('../img/ringtones-blue.png');
+}
+
+.wrap.break .window .left .menu button.active .text {
+    color: #00A7FF;
+}
+
+.wrap.break .window .left .bottom .play .sector{
+    border-color: #00A7FF;
+}
+
+.wrap.break .window .left .bottom .play .playButton {
+    background-image: url('../img/play-blue.png');
+}
+
+.wrap.break .window .left .bottom .play .pauseButton {
+    background-image: url('../img/pause-white.png'), radial-gradient(#00A7FF 50%, transparent 50%);
+}
+
+.wrap.break .window .left .bottom .information .time {
+    color: #00A7FF;
+}
+
+.wrap.break .window .analytics .focus .amount .number {
+    color: #00A7FF;
+}
+
+.wrap.break .window .ringtones .radio button.checked .radioCircle {
+    background-image: radial-gradient(#00A7FF 5px, transparent 4px);
+    border-color: #00A7FF;
+}
