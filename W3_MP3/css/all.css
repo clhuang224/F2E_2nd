@@ -327,6 +327,7 @@ button {
     align-items: center;
     background-image: url(../img/cd.png);
     background-position: center center;
+    transition: 1s all;
 }
 
 .player .cd .circle {
@@ -560,4 +561,46 @@ button {
     background-color: #C5C5C5;
     transform-origin: left;
     transform: skewY(45deg);
+}
+
+/* animation */
+
+.player.playing .cd{
+    -webkit-animation: playing 5s infinite linear;
+	-moz-animation: playing 5s infinite linear;
+	-o-animation: playing 5s infinite linear;
+	animation: playing 5s infinite linear;
+}
+
+@-webkit-keyframes playing {
+	from {
+		-webkit-transform: rotate(0deg);
+	}
+	to {
+		-webkit-transform: rotate(360deg);
+	}
+}
+@-moz-keyframes playing {
+	from {
+		-moz-transform: rotate(0deg);
+	}
+	to {
+		-moz-transform: rotate(360deg);
+	}
+}
+@-o-keyframes playing {
+	from {
+		-o-transform: rotate(0deg);
+	}
+	to {
+		-o-transform: rotate(360deg);
+	}
+}
+@keyframes playing {
+	from {
+		transform: rotate(0deg);
+	}
+	to {
+		transform: rotate(360deg);
+	}
 }
