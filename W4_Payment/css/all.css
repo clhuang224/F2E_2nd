@@ -1,0 +1,395 @@
+/* reset */
+
+html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockquote, pre, a, abbr, acronym, address, big, cite, code, del, dfn, em, img, ins, kbd, q, s, samp, small, strike, strong, sub, sup, tt, var, b, u, i, center, dl, dt, dd, ol, ul, li, fieldset, form, label, legend, table, caption, tbody, tfoot, thead, tr, th, td, article, aside, canvas, details, embed, figure, figcaption, footer, header, hgroup, menu, nav, output, ruby, section, summary, time, mark, audio, video {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    font-size: 100%;
+    vertical-align: baseline;
+}
+
+article, aside, details, figcaption, figure, footer, header, hgroup, menu, nav, section {
+    display: block;
+}
+
+body {
+    line-height: 1;
+    position: relative;
+}
+
+ol, ul {
+    list-style: none;
+}
+
+blockquote, q {
+    quotes: none;
+}
+
+blockquote:before, blockquote:after, q:before, q:after {
+    content: '';
+    content: none;
+}
+
+table {
+    border-collapse: collapse;
+    border-spacing: 0;
+}
+
+* {
+    font-family: 'Noto Sans TC', sans-serif;
+    box-sizing: border-box;
+    background-repeat: no-repeat;
+}
+
+button {
+    outline: none;
+    cursor: pointer;
+    border: 0;
+    background-color: transparent;
+    background-position: center;
+    background-repeat: no-repeat;
+}
+
+img {
+    height: auto;
+}
+
+body {
+    max-width: 1024px;
+    margin: auto;
+    color: #505050;
+}
+
+h3 {
+    font-size: 22px;
+    line-height: 33px;
+    color: #62A1D2;
+}
+
+/* header */
+
+.header {
+    display: flex;
+    justify-content: center;
+}
+
+.header div {
+    height: 15px;
+}
+
+.header .grey {
+    width: 13.67%;
+    background-color: #B3ABA6;
+}
+
+.header .orange {
+    width: 21.48%;
+    background-color: #FF8F14;
+}
+
+.header .dark {
+    width: 9.28%;
+    background-color: #173060;
+}
+
+.header .pink {
+    width: 22.46%;
+    background-color: #F65453;
+}
+
+.header .red {
+    width: 18.55%;
+    background-color: #CC251B;
+}
+
+.header .blue {
+    width: 14.56%;
+    background-color: #62A1D2;
+}
+
+/* main */
+
+.main {
+    padding: 0 47px 60px 47px;
+}
+
+.main>div {
+    display: none;
+}
+
+.main[data-router="order"] .progress, .main[data-router="order"] .product-list, .main[data-router="order"] .payment {
+    display: flex;
+}
+
+.main[data-router="credit"] .progress, .main[data-router="credit"] .payment, .main[data-router="credit"] .credit-information {
+    display: flex;
+}
+
+.main[data-router="atm"] .progress, .main[data-router="atm"] .payment, .main[data-router="atm"] .atm-information {
+    display: flex;
+}
+
+.main[data-router="conveniece"] .progress, .main[data-router="conveniece"] .payment, .main[data-router="conveniece"] .convenience-information {
+    display: flex;
+}
+
+/* main>progress */
+
+.main .progress {
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 15px;
+}
+
+.main .progress .title {
+    font-size: 30px;
+    line-height: 45px;
+    color: #173060;
+}
+
+.main .progress .bar {
+    max-width: 680px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 15px 0px 20px 0;
+}
+
+.main .progress .bar .circle {
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background-color: #B3ABA6;
+}
+
+.main .progress .bar .line {
+    position: relative;
+    height: 3px;
+    max-width: 307px;
+    width: 45.6%;
+    background-color: #B3ABA6;
+    color: #B3ABA6;
+}
+
+.main .progress .bar .step0 {
+    background-color: #62A1D2;
+}
+
+.main[data-router="credit"] .progress .bar .step1, .main[data-router="atm"] .progress .bar .step1, .main[data-router="convenience"] .progress .bar .step1 {
+    background-color: #62A1D2;
+    color: #62A1D2;
+}
+
+.main[data-router="success"] .progress .bar .step1, .main[data-router="sucess"] .progress .bar .step2 {
+    background-color: #62A1D2;
+    color: #62A1D2;
+}
+
+.progress .bar .line::after {
+    position: absolute;
+    top: 11.5px;
+    font-size: 14px;
+    line-height: 20px;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+}
+
+.progress .bar .line.step1::after {
+    content: 'Step1 選定支付方式';
+}
+
+.progress .bar .line.step2::after {
+    content: 'Step2 輸入信用卡資訊或取得支付代碼';
+}
+
+/* main product-list */
+
+.product-list {
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+}
+
+.product-list .order {
+    margin-top: 10px;
+    border: 2px #62A1D2 solid;
+    border-radius: 10px;
+    padding: 20px;
+    width: 100%;
+}
+
+.product-list .order .order-number {
+    font-size: 18px;
+    line-height: 27px;
+    color: #505050;
+}
+
+.product-list .order .list .product {
+    padding: 20px 0;
+    border-bottom: 1px rgba(179, 171, 166, 0.5) solid;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.product-list .order .list .product .image {
+    width: 150px;
+}
+
+.product-list .order .list .product .text {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+    margin-left: 30px;
+    width: 351px;
+}
+
+.product-list .order .list .product .text .name {
+    font-size: 18px;
+    line-height: 27px;
+}
+
+.product-list .order .list .product .text .description {
+    font-size: 14px;
+    line-height: 22px;
+    color: #B3ABA6;
+}
+
+.product-list .order .list .product .amount {
+    margin-left: 69px;
+    width: 140px;
+    height: 30px;
+    border: 1px #B3ABA6 solid;
+    border-radius: 2px;
+    display: flex;
+    justify-content: center;
+}
+
+.product-list .order .list .product .amount button {
+    height: 30px;
+    width: 30px;
+    background-size: 14px;
+}
+
+.product-list .order .list .product .amount .minus {
+    background-image: url(../img/icon_less@2x.png);
+}
+
+.product-list .order .list .product .amount .plus {
+    background-image: url(../img/icon_add@2x.png);
+}
+
+.product-list .order .list .product .amount .input {
+    width: 80px;
+    border-width: 0 1px 0 1px;
+    border-color: #B3ABA6;
+    border-style: solid;
+    text-align: center;
+    outline: none;
+}
+
+.product-list .order .list .product .price {
+    width: 91px;
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    font-size: 18px;
+    line-height: 22px;
+}
+
+.product-list .order .list .product .delete {
+    margin-left: 10px;
+    width: 40px;
+    height: 40px;
+    background-image: url(../img/order_btn_delete_normal@2x.png);
+    border-radius: 50%;
+}
+
+.product-list .more {
+    padding: 0;
+    margin: auto;
+}
+
+.product-list .more .triangle {
+    padding: 0;
+    border-style: solid;
+    border-width: 10px 15px 0 15px;
+    border-color: #62a1d2 transparent transparent transparent;
+}
+
+/* main>payment */
+
+.payment {
+    flex-direction: column;
+    justify-content: center;
+    align-items: flex-start;
+}
+
+.payment .title {
+    margin-top: 40px;
+}
+
+.payment .list {
+    margin-top: 15px;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+}
+
+.payment .list .method {
+    width: 290px;
+    height: 130px;
+    border: 2px #62A1D2 solid;
+    border-radius: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.payment .list .method .button {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.payment .list .method .image {
+    width: 120px;
+    height: 70px;
+}
+
+.payment .list .method .text {
+    font-size: 16px;
+    line-height: 24px;
+    font-weight: bold;
+    color: #62A1D2;
+}
+
+.payment .attention {
+    font-size: 14px;
+    line-height: 22px;
+    color: #B3ABA6;
+}
+
+.payment .attention .ul .li::before {
+    content: '‧';
+}
+
+/* footer */
+
+.footer{
+    height: 50px;
+    background-color: #173060;
+    color: #B3ABA6;
+    font-size: 12px;
+    line-height: 18px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}

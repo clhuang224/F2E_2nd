@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="zn-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Payment</title>
+    <link rel="shortcut icon" href="img/icon_PayByShop@2x.png" type="image/x-icon">
+    <!-- font -->
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+    <!-- css -->
+    <link rel="stylesheet" href="css/all.css">
+</head>
+
+<body>
+    <header class="header">
+        <div class="grey"></div>
+        <div class="orange"></div>
+        <div class="dark"></div>
+        <div class="pink"></div>
+        <div class="red"></div>
+        <div class="blue"></div>
+    </header>
+    <main class="main" data-router="order">
+        <div class="progress">
+            <h2 class="title">訂單資訊</h2>
+            <div class="bar">
+                <div class="circle step0"></div>
+                <div class="line step1"></div>
+                <div class="circle step1"></div>
+                <div class="line step2"></div>
+                <div class="circle step2"></div>
+            </div>
+        </div>
+        <div class="product-list">
+            <h3 class="title">確認訂單金額</h3>
+            <div class="order">
+                <h4 class="order-number">訂單編號 201907310111</h4>
+                <ul class="list">
+                    <li class="product">
+                        <img class="image" src="img/ipadpro-9_TP_V4@2x.png">
+                        <div class="text">
+                            <h5 class="name">商品名稱商品名稱商品名稱商品名稱</h5>
+                            <p class="description">商品說明商品說明商品說明商品說明商品說明商品說明商品說明商品說明商品說明商品說明</p>
+                        </div>
+                        <div class="amount">
+                            <button class="minus"></button>
+                            <input type="text" class="input" value="1">
+                            <button class="plus"></button>
+                        </div>
+                        <div class="price">$ 1,000</div>
+                        <button class="delete"></button>
+                    </li>
+                    <li class="product">
+                        <img class="image" src="img/headphoneIMGL4494_TP_V4@2x.png">
+                        <div class="text">
+                            <h5 class="name">商品名稱商品名稱商品名稱商品名稱</h5>
+                            <p class="description">商品說明商品說明商品說明商品說明商品說明商品說明商品說明商品說明商品說明商品說明</p>
+                        </div>
+                        <div class="amount">
+                            <button class="minus"></button>
+                            <input type="text" class="input" value="1">
+                            <button class="plus"></button>
+                        </div>
+                        <div class="price">$ 1,000</div>
+                        <button class="delete"></button>
+                    </li>
+                </ul>
+            </div>
+            <button class="more">
+                <div class="triangle"></div>
+            </button>
+        </div>
+        <div class="payment">
+            <h3 class="title">付款方式</h3>
+            <ul class="list">
+                <li class="method">
+                    <button class="button">
+                        <img class="image" src="img/icon_PayByCard@2x.png" alt="使用信用卡付款">
+                        <div class="text">使用信用卡付款</div>
+                    </button>
+                </li>
+                <li class="method">
+                    <button class="button">
+                        <img class="image" src="img/icon_PayByATM@2x.png" alt="使用WebATM付款">
+                        <div class="text">使用WebATM付款</div>
+                    </button>
+                </li>
+                <li class="method">
+                    <button class="button">
+                        <img class="image" src="img/icon_PayByShop@2x.png" alt="使用超商代碼付款">
+                        <div class="text">使用超商代碼付款</div>
+                    </button>
+                </li>
+            </ul>
+            <div class="attention">
+                <div class="title">注意事項</div>
+                <ul class="ul">
+                    <li class="li">使用信用卡付款請確認您有信用卡。</li>
+                    <li class="li">使用 WebATM付款 請確認您有網路 ATM。</li>
+                    <li class="li">使用超商付款請確認附近有超商。</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="credit-information"></div>
+        <div class="atm-information"></div>
+        <div class="convenience-information"></div>
+        <div class="success"></div>
+        <div class="fail"></div>
+    </main>
+    <footer class="footer">© 2019 Lynn</footer>
+
+    <script src="js/jquery-3.4.1.min.js"></script>
+    <script src="js/all.js"></script>
+</body>
+
+</html>
