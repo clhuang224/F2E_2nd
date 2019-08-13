@@ -3,10 +3,10 @@ let graphic;
 const gameStart = {
     key: 'gameStart',
     preload: function () {
-        this.load.image('img-title', '../img/img-title.png');
-        this.load.image('text-title', '../img/txt-title.png');
-        this.load.image('text-subtitle', '../img/txt-subtitle.png');
-        this.load.image('button','../img/btn-press-start.png');
+        this.load.image('img-title', './img/img-title.png');
+        this.load.image('text-title', './img/txt-title.png');
+        this.load.image('text-subtitle', './img/txt-subtitle.png');
+        this.load.image('button','./img/btn-press-start.png');
     },
     create: function () {
         this.imgTitle = this.add.image(392.5, 38.75 + gameHeight / 2, 'img-title');

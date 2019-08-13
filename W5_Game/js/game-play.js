@@ -1,10 +1,10 @@
 const gamePlay = {
     key: 'gamePlay',
     preload: function () {
-        this.load.image('bg-back', '../img/bg-back.png');
-        this.load.image('bg-middle', '../img/bg-middle.png');
-        this.load.image('bg-front', '../img/bg-front.png');
-        this.load.image('bg-ground', '../img/bg-ground.png');
+        this.load.image('bg-back', './img/bg-back.png');
+        this.load.image('bg-middle', './img/bg-middle.png');
+        this.load.image('bg-front', './img/bg-front.png');
+        this.load.image('bg-ground', './img/bg-ground.png');
     },
     create: function () {
         this.camera = this.cameras.add(0, 0, gameWidth, gameHeight);
