@@ -35,13 +35,21 @@ const gamePlay = {
             repeat: -1,
         });
 
+
         // 背景
         this.bgColor = this.cameras.add(0, 0, gameWidth, gameHeight);
         this.bgColor.setBackgroundColor('#20552C');
         this.bgBack = this.add.tileSprite(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 'bg-back');
         this.bgMiddle = this.add.tileSprite(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 'bg-middle');
         this.bgFront = this.add.tileSprite(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 'bg-front');
-        this.bgGround = this.add.tileSprite(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 'bg-ground');
+        this.bgGround = this.add.tileSprite(gameWidth - 888, gameHeight - 100, 1776, 200, 'bg-ground');
+        this.physics.add.existing(this.bgGround);
+        this.bgGround.body.immovable = true;
+        this.bgGround.body.moves = false;
+        this.transparent = this.add.rectangle(gameWidth / 2, 100, gameWidth, 200, 0x000000, 0);
+        this.physics.add.existing(this.transparent);
+        this.transparent.body.immovable = true;
+        this.transparent.body.moves = false;
 
         // 資訊
         this.controlImg = this.add.image(171.5, 759.5, 'control');
@@ -52,10 +60,14 @@ const gamePlay = {
 
         // 主角
         this.player = this.physics.add.sprite(144, 120, 'player');
+        this.player.x = 100;
+        this.player.y = 300;
         this.player.anims.play('float', true);
-        this.player.setCollideWorldBounds(true);
-        this.player.setBounce(1);
-        this.player.setSize(100, 100, 0);
+        this.player.setBounce(0);
+        this.player.setCollideWorldBounds(true, 0, 0);
+        this.player.setSize(90, 100, 0);
+        this.physics.add.collider(this.player, this.bgGround);
+        this.physics.add.collider(this.player, this.transparent);
 
         // 紅色
         this.red = this.add.rectangle(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 0xFF0000, 0);
@@ -63,7 +75,57 @@ const gamePlay = {
         this.timeId = setInterval(() => {
             this.time -= 1;
             this.timeText.setText(`${String(Math.floor(this.time / 60)).padStart(2, '0')}:${String(this.time % 60).padStart(2, '0')}`);
+            if (this.time === 0) {
+                clearInterval(this.timeId);
+            }
         }, 1000);
+
+        // 鍵盤
+        this.input.keyboard.on('keyup', (event) => {
+            let delay;
+            if (event.keyCode === SPACE) {
+                delay = 2000;
+            }
+            else {
+                delay = 500;
+            }
+            setTimeout(() => {
+                this.player.flipX = false;
+                this.player.flipY = false;
+                this.player.anims.play('float', true);
+            }, delay);
+
+        });
+        this.input.keyboard.on('keydown', (event) => {
+            switch (event.keyCode) {
+                case UP:
+                    this.player.setVelocityY(-100);
+                    this.player.anims.play('move', true);
+                    this.player.flipY = false;
+                    break;
+                case DOWN:
+                    this.player.setVelocityY(100);
+                    this.player.anims.play('move', true);
+                    this.player.flipY = true;
+                    break;
+                case LEFT:
+                    this.player.setVelocityX(-200);
+                    this.player.anims.play('move', true);
+                    this.player.flipX = true;
+                    break;
+                case RIGHT:
+                    this.player.setVelocityX(200);
+                    this.player.anims.play('move', true);
+                    this.player.flipX = false;
+                    break;
+                case SPACE:
+                    this.player.setVelocityY(-300);
+                    this.player.anims.play('move', true);
+                    this.player.flipY = false;
+                    break;
+            }
+        })
+
     },
     update: function () {
         this.bgBack.tilePositionX += 2 * this.speed;
@@ -71,26 +133,11 @@ const gamePlay = {
         this.bgFront.tilePositionX += 5 * this.speed;
         this.bgGround.tilePositionX += 6 * this.speed;
 
-        // 控制主角
-        let keyboard = this.input.keyboard.createCursorKeys();
-        this.player.anims.play('float', true);
-        if (keyboard.up.isDown) {
-            // 需要再考慮是否為彈跳狀態
-            this.player.setVelocityY(-200);
-            this.player.anims.play('move', true);
-            this.player.flipY = false;
-        } else if (keyboard.down.isDown) {
-            this.player.setVelocityY(200);
-            this.player.anims.play('move', true);
-            this.player.flipY = true;
-        } else if (keyboard.left.isDown) {
-            this.player.setVelocityX(-200);
-            this.player.anims.play('move', true);
-            this.player.flipX = true;
-        } else if (keyboard.right.isDown) {
-            this.player.setVelocityX(200);
-            this.player.anims.play('move', true);
-            this.player.flipX = false;
+        if (this.player.body.velocity.x > 0) {
+            this.player.setVelocityX(this.player.body.velocity.x - 1);
+        }
+        else if (this.player.body.velocity.x < 0) {
+            this.player.setVelocityX(this.player.body.velocity.x + 1);
         }
 
         // 技能Bonus
@@ -109,7 +156,6 @@ const gamePlay = {
             case 0:
                 this.red.setFillStyle(0xFF0000, 0);
                 this.speed = 0;
-                clearInterval(this.timeId);
                 break;
         }
     }
