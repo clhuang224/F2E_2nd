@@ -8,6 +8,15 @@ const config = {
         gamePlay,
         // gameEnd,
     ],
+    physics: {
+        default: 'arcade',
+        arcade: {
+            gravity: {
+                y: 250
+            },
+            // debug: true,
+        },
+    },
     backgroundColor:0x7EBE8D,
 }
 
