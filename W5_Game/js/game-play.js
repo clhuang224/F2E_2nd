@@ -16,6 +16,9 @@ const gamePlay = {
         this.load.image('obstacle-4', './img/obstacle-4.png');
         this.load.image('obstacle-5', './img/obstacle-5.png');
         this.load.image('obstacle-6', './img/obstacle-6.png');
+        this.load.image('black', './img/black.png');
+        this.load.image('game-over', './img/txt-game-over.png');
+        this.load.image('try-again', './img/btn-try-again.png');
 
         this.playing = true;
         this.time = 90;
@@ -182,6 +185,11 @@ const gamePlay = {
                         break;
                 }
             }
+            else {
+                if (event.keyCode === SPACE) {
+                    this.scene.start('gamePlay');
+                }
+            }
         })
 
     },
@@ -228,12 +236,6 @@ const gamePlay = {
                 this.lastObstacleTime = this.time;
                 this.lastObstacleType = obstacleType;
             }
-            //// 刪除
-            if (this.obstacleQueue.length > 0 && this.obstacleQueue[0].obstacle.x < -500) {
-                delete this.obstacleQueue[0].collider;
-                delete this.obstacleQueue[0].obstacle;
-                this.obstacleQueue.shift();
-            }
             //// 移動
             for (let i = 0; i < this.obstacleQueue.length; i++) {
                 this.obstacleQueue[i].obstacle.x -= 8 * this.speed;
@@ -243,7 +245,16 @@ const gamePlay = {
                 if (this.obstacleQueue[i].obstacle.body.touching.none == false) {
                     this.playing = false;
                     this.player.anims.play('dead', true);
+                    this.black = this.add.image(gameWidth / 2, gameHeight / 2, 'black');
+                    this.gameOver = this.add.image(1019.435, 366.925, 'game-over');
+                    this.tryAgain = this.add.image(1020, 483, 'try-again');
                 }
+            }
+            //// 刪除
+            if (this.obstacleQueue.length > 0 && this.obstacleQueue[0].obstacle.x < -500) {
+                delete this.obstacleQueue[0].collider;
+                delete this.obstacleQueue[0].obstacle;
+                this.obstacleQueue.shift();
             }
 
             // 技能Bonus
@@ -271,9 +282,8 @@ const gamePlay = {
             }
         }
         else {
-            if (this.player.body.velocity.x != 0) {
-                this.player.body.velocity.x = 0;
-            }
+            this.player.body.moves = false;
+            this.player.body.immovable = true;
         }
     }
 
