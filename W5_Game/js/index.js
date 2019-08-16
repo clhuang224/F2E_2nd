@@ -14,7 +14,7 @@ const config = {
             gravity: {
                 y: 250
             },
-            debug: true,
+            // debug: true,
         },
     },
     backgroundColor:0x7EBE8D,
