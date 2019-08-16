@@ -10,12 +10,18 @@ const gameStart = {
         this.imgTitle = this.add.image(392.5, 38.75 + gameHeight / 2, 'img-title');
         this.graphic = this.add.graphics();
         this.graphic.fillStyle(0xffffff, 1);
-        this.graphic.fillRoundedRect(750, 32, 445, 736, 8);
-        this.textTitle = this.add.image(791.52 + 359.08 / 2, 197.99 + 238.97 / 2, 'text-title');
+        this.graphic.fillRoundedRect(gameWidth * 0.5859375, gameHeight * 0.04, gameWidth * 445 / 1280, gameHeight * 736 / 800, 8);
+        this.textTitle = this.add.sprite(gameWidth * 0.28125, gameHeight * 0.29875, 'text-title');
+        this.textTitle.x = gameWidth * 0.75864063;
+        this.textTitle.y = gameHeight * 0.39684375;
         this.textTitle.alpha = 0;
-        this.textSubtitle = this.add.image(846.41 + 272.14 / 2, 480.77 + 24 / 2, 'text-subtitle');
+        this.textSubtitle = this.add.sprite(gameWidth * 0.21328125, gameHeight * 0.03, 'text-subtitle');
+        this.textSubtitle.x = gameWidth * 0.7675625;
+        this.textSubtitle.y = gameHeight * 0.6159625;
         this.textSubtitle.alpha = 0;
-        this.button = this.add.image(979, 592, 'button');
+        this.button = this.add.sprite(buttonWidth, buttonHeight, 'button');
+        this.button.x = gameWidth * 0.76484375;
+        this.button.y = gameHeight * 0.74;
         this.button.alpha = 0;
         this.keyboard = this.input.keyboard.createCursorKeys();
     },

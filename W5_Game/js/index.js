@@ -14,10 +14,9 @@ const config = {
             gravity: {
                 y: 250
             },
-            // debug: true,
         },
     },
-    backgroundColor:0x7EBE8D,
+    backgroundColor: 0x7EBE8D,
 }
 
 const game = new Phaser.Game(config);

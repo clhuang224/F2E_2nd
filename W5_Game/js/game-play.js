@@ -22,44 +22,44 @@ const gamePlay = {
 
         this.playing = true;
         this.lose = false;
-        this.replay = false;
-        this.time = 90;
+        this.invincible = false;
+        this.time = 61;
         this.speed = 1;
-        this.lastObstacleTime = 90;
+        this.lastObstacleTime = 95;
         this.lastObstacleType = '';
         this.obstacleTypeAmount = 2;
         this.createObstacleInterval = 2;
         this.obstacleQueue = new Array();
         this.obstacleConfig = {
             'obstacle-1': {
-                width: 248,
-                height: 304,
-                y: () => { return 152 - Math.random() * 20; },
+                width: gameWidth * .19375,
+                height: gameHeight * .38,
+                y: () => { return gameHeight * .19 * 1.025; },
             },
             'obstacle-2': {
-                width: 368,
-                height: 192,
-                y: () => { return 504 + Math.random() * 100; },
+                width: gameWidth * .2875,
+                height: gameHeight * .24,
+                y: () => { return gameHeight * .625 + Math.random() * gameHeight / 8; },
             },
             'obstacle-3': {
-                width: 368,
-                height: 192,
-                y: () => { return 336 + Math.random() * 214; },
+                width: gameWidth * .2875,
+                height: gameHeight * .24,
+                y: () => { return gameHeight * .42 + Math.random() * gameHeight * .2675; },
             },
             'obstacle-4': {
-                width: 288,
-                height: 136,
-                y: () => { return 150 + Math.random() * 182; },
+                width: gameWidth * .225,
+                height: gameHeight * .17,
+                y: () => { return gameHeight * .1875 + Math.random() * gameHeight * .2275; },
             },
             'obstacle-5': {
-                width: 192,
-                height: 224,
-                y: () => { return 150 + Math.random() * 300; },
+                width: gameWidth * .15,
+                height: gameHeight * .28,
+                y: () => { return groundHeight * .75 + Math.random() * gameHeight * .375; },
             },
             'obstacle-6': {
-                width: 136,
-                height: 152,
-                y: () => { return 150 + Math.random() * 300; },
+                width: gameWidth * .10625,
+                height: gameHeight * .19,
+                y: () => { return groundHeight * .75 + Math.random() * gameHeight * .375; },
             }
         }
     },
@@ -84,6 +84,12 @@ const gamePlay = {
             repeat: -1,
         });
         this.anims.create({
+            key: 'invincible',
+            frames: this.anims.generateFrameNumbers('player', { start: 4, end: 5 }),
+            frameRate: 5,
+            repeat: -1,
+        });
+        this.anims.create({
             key: 'dead',
             frames: this.anims.generateFrameNumbers('player', { start: 6, end: 6 }),
             frameRate: 1,
@@ -103,37 +109,56 @@ const gamePlay = {
         this.bgBack = this.add.tileSprite(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 'bg-back');
         this.bgMiddle = this.add.tileSprite(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 'bg-middle');
         this.bgFront = this.add.tileSprite(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 'bg-front');
-        this.bgGround = this.add.tileSprite(gameWidth - 888, gameHeight - 100, 1776, 200, 'bg-ground');
+        this.bgGround = this.add.tileSprite(gameWidth * 0.30625, gameHeight - groundHeight / 2, gameWidth * 1.3875, groundHeight, 'bg-ground');
         this.physics.add.existing(this.bgGround);
         this.bgGround.body.immovable = true;
         this.bgGround.body.moves = false;
-        this.bgGround.body.setSize(1816, 190, 30, 30);
-        this.transparent = this.add.rectangle(gameWidth / 2, 100, gameWidth, 200, 0x000000, 0);
-        this.physics.add.existing(this.transparent);
-        this.transparent.body.immovable = true;
-        this.transparent.body.moves = false;
+        this.bgGround.body.setSize(this.bgGround.width * 1.2, groundHeight * 0.9, this.bgGround.width, this.bgGround.height * 0.05);
+        this.topBound = this.add.rectangle(gameWidth / 2, topBoundHeight / 2, gameWidth, gameHeight / 4, 0x000000, 0);
+        this.physics.add.existing(this.topBound);
+        this.topBound.body.immovable = true;
+        this.topBound.body.moves = false;
 
         // 資訊
-        this.controlImg = this.add.image(171.5, 759.5, 'control');
-        this.timeImg = this.add.image(1138, 757, 'time');
-        this.timeText = this.add.text(1160, 738,
+        this.controlImg = this.add.sprite(gameWidth * .13515625, gameHeight * .0375, 'control');
+        this.controlImg.x = gameWidth * .13398438;
+        this.controlImg.y = gameHeight * .949375;
+        this.timeImg = this.add.sprite(gameWidth * .01953125, gameHeight * .3125, 'time');
+        this.timeImg.x = gameWidth * .8890625;
+        this.timeImg.y = gameHeight * .94625;
+        this.timeText = this.add.text(gameWidth * .90625, gameHeight * .9225,
             `${String(Math.floor(this.time / 60)).padStart(2, '0')}:${String(this.time % 60).padStart(2, '0')}`
-            , { fontSize: 32, lineSpacing: 38, padding: 0, margin: 0, fontFamily: 'Roboto', });
+            , { fontSize: gameHeight * .04, lineSpacing: gameHeight * .0475, padding: 0, margin: 0, fontFamily: 'Roboto', });
 
         // 主角
-        this.player = this.physics.add.sprite(144, 120, 'player');
-        this.player.x = 100;
-        this.player.y = 300;
+        this.player = this.physics.add.sprite(playerWidth, playerHeight, 'player');
+        this.player.x = gameWidth * .08;
+        this.player.y = gameHeight * .375;
+        this.player.depth = 5;
         this.player.anims.play('float', true);
         this.player.setBounce(0);
         this.player.setCollideWorldBounds(true, 0, 0);
-        this.player.body.setSize(105, 110, 0);
+        this.player.body.setSize(playerWidth * .75, playerHeight * .9, 0);
         this.physics.add.collider(this.player, this.bgGround);
-        this.physics.add.collider(this.player, this.transparent);
+        this.physics.add.collider(this.player, this.topBound);
 
-        // 紅色
-        this.red = this.add.rectangle(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 0xFF0000, 0);
-        this.red.depth = 10;
+        // UI
+        this.cover = this.add.rectangle(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 0xFF0000, 1);
+        this.cover.alpha = 0;
+        this.cover.depth = 10;
+        this.black = this.add.image(gameWidth / 2, gameHeight / 2, 'black');
+        this.black.depth = 15;
+        this.black.alpha = 0;
+        this.gameOver = this.add.sprite(gameWidth * .29296875, gameHeight * .45865625, 'game-over');
+        this.gameOver.x = gameWidth * .79643359;
+        this.gameOver.y = gameHeight * .45865625;
+        this.gameOver.alpha = 0;
+        this.gameOver.depth = 15;
+        this.tryAgain = this.add.sprite(buttonWidth, buttonHeight, 'try-again');
+        this.tryAgain.x = gameWidth * .796875;
+        this.tryAgain.y = gameHeight * .60375;
+        this.tryAgain.alpha = 0;
+        this.tryAgain.depth = 15;
 
         // 計時
         this.timeId = setInterval(() => {
@@ -154,11 +179,13 @@ const gamePlay = {
                 delay = 500;
             }
             setTimeout(() => {
-                if (this.playing) {
-                    this.player.flipX = false;
-                    this.player.flipY = false;
-                    this.player.body.setSize(105, 110, 0);
-                    this.player.anims.play('float', true);
+                if (this.invincible === false) {
+                    if (this.playing) {
+                        this.player.flipX = false;
+                        this.player.flipY = false;
+                        this.player.body.setSize(playerWidth * .75, playerHeight * .9, 0);
+                        this.player.anims.play('float', true);
+                    }
                 }
             }, delay);
 
@@ -167,58 +194,67 @@ const gamePlay = {
             if (this.playing) {
                 switch (event.keyCode) {
                     case UP:
-                        this.player.setVelocityY(-100);
-                        this.player.anims.play('move', true);
-                        this.player.flipY = false;
+                        this.player.setVelocityY(-gameHeight / 8);
+                        if (this.invincible === false) {
+                            this.player.anims.play('move', true);
+                            this.player.flipY = false;
+                        }
                         break;
                     case DOWN:
-                        this.player.setVelocityY(200);
-                        this.player.anims.play('move', true);
-                        this.player.flipY = true;
+                        this.player.setVelocityY(gameHeight / 4);
+                        if (this.invincible === false) {
+                            this.player.anims.play('move', true);
+                            this.player.flipY = true;
+                        }
                         break;
                     case LEFT:
-                        this.player.setVelocityX(-200);
-                        this.player.body.setSize(105, 110, 50);
-                        this.player.anims.play('move', true);
-                        this.player.flipX = true;
+                        this.player.setVelocityX(-gameHeight / 4);
+                        if (this.invincible === false) {
+                            this.player.body.setSize(playerWidth * .75, playerHeight * .9, playerWidth / 3);
+                            this.player.anims.play('move', true);
+                            this.player.flipX = true;
+                        }
                         break;
                     case RIGHT:
-                        this.player.setVelocityX(200);
-                        this.player.anims.play('move', true);
-                        this.player.flipX = false;
+                        this.player.setVelocityX(gameHeight / 4);
+                        if (this.invincible === false) {
+                            this.player.anims.play('move', true);
+                            this.player.flipX = false;
+                        }
                         break;
                     case SPACE:
-                        this.player.setVelocityY(-300);
-                        this.player.anims.play('move', true);
-                        this.player.flipY = false;
+                        this.player.setVelocityY(-gameHeight * .375);
+                        if (this.invincible === false) {
+                            this.player.anims.play('move', true);
+                            this.player.flipY = false;
+                        }
                         break;
                 }
             }
-            if (this.replay) {
-                if (event.keyCode === SPACE) {
+            if (this.lose === true) {
+                if (this.tryAgain.alpha >= 1 && event.keyCode === SPACE) {
                     this.scene.start('gameStart');
                 }
             }
         })
-
     },
     update: function () {
         if (this.playing) {
-            this.bgBack.tilePositionX += 2 * this.speed;
-            this.bgMiddle.tilePositionX += 3 * this.speed;
-            this.bgFront.tilePositionX += 5 * this.speed;
-            this.bgGround.tilePositionX += 8 * this.speed;
+            this.bgBack.tilePositionX += 2 * this.speed * unit;
+            this.bgMiddle.tilePositionX += 3 * this.speed * unit;
+            this.bgFront.tilePositionX += 5 * this.speed * unit;
+            this.bgGround.tilePositionX += 8 * this.speed * unit;
 
             if (this.player.body.velocity.x > 0) {
-                this.player.setVelocityX(this.player.body.velocity.x - 1);
+                this.player.setVelocityX(this.player.body.velocity.x - unit);
             }
             else if (this.player.body.velocity.x < 0) {
-                this.player.setVelocityX(this.player.body.velocity.x + 1);
+                this.player.setVelocityX(this.player.body.velocity.x + unit);
             }
 
             // 障礙物
             //// 新增
-            if (this.speed > 0 &&
+            if (this.time > 2 &&
                 this.lastObstacleTime - this.time >= this.createObstacleInterval &&
                 Math.floor(Math.random() * 100) % 5 == 0) {
                 let obstacleType = `obstacle-${Math.floor(Math.random() * 10) % this.obstacleTypeAmount + 1}`;
@@ -231,76 +267,120 @@ const gamePlay = {
                     obstacleType);
                 currentObstacle.body.immovable = true;
                 currentObstacle.body.moves = false;
-                currentObstacle.body.setSize(this.obstacleConfig[obstacleType].width - 50,
-                    this.obstacleConfig[obstacleType].height - 50,
-                    25, 25);
-                currentObstacle.x = 2000;
+                currentObstacle.body.setSize(this.obstacleConfig[obstacleType].width * .85,
+                    this.obstacleConfig[obstacleType].height * .85,
+                    this.obstacleConfig[obstacleType].width * .1,
+                    this.obstacleConfig[obstacleType].height * .1);
+                currentObstacle.x = gameWidth + currentObstacle.width;
                 currentObstacle.y = this.obstacleConfig[obstacleType].y();
-                let currentCollider = this.physics.add.collider(this.player, currentObstacle);
+                let currentOverlap = this.physics.add.overlap(this.player, currentObstacle);
                 this.obstacleQueue.push(
                     {
                         obstacle: currentObstacle,
-                        collider: currentCollider,
+                        overlap: currentOverlap,
                     });
                 this.lastObstacleTime = this.time;
                 this.lastObstacleType = obstacleType;
             }
             //// 移動
             for (let i = 0; i < this.obstacleQueue.length; i++) {
-                this.obstacleQueue[i].obstacle.x -= 8 * this.speed;
+                this.obstacleQueue[i].obstacle.x -= 8 * this.speed * unit;
             }
             /// 撞到
             for (let i = 0; i < this.obstacleQueue.length; i++) {
-                if (this.obstacleQueue[i].obstacle.body.touching.none === false) {
+                if (this.obstacleQueue[i].obstacle.body.touching.none === false && this.invincible === false) {
+                    console.log(this.obstacleQueue[i].obstacle);
                     this.playing = false;
-                    this.replay = true;
                     this.lose = true;
                     this.player.anims.play('dead', true);
-                    this.black = this.add.image(gameWidth / 2, gameHeight / 2, 'black');
-                    this.gameOver = this.add.image(1019.435, 366.925, 'game-over');
-                    this.tryAgain = this.add.image(1020, 483, 'try-again');
+                    this.player.setVelocityX(0);
+                    this.player.setVelocityY(0);
                 }
             }
             //// 刪除
-            if (this.obstacleQueue.length > 0 && this.obstacleQueue[0].obstacle.x < -500) {
-                delete this.obstacleQueue[0].collider;
+            if (this.obstacleQueue.length > 0 && this.obstacleQueue[0].obstacle.x < -this.obstacleQueue[0].obstacle.width) {
+                this.obstacleQueue[0].overlap.destroy();
+                delete this.obstacleQueue[0].overlap;
+                this.obstacleQueue[0].obstacle.destroy();
                 delete this.obstacleQueue[0].obstacle;
                 this.obstacleQueue.shift();
             }
 
             // 技能Bonus
-            // this.skill = this.add.sprite(49, 49, 'skill');
-            // this.skill.anims.play('shine', true);
+            if (this.skill === undefined && this.invincible === false) {
+                //// 新增
+                if (this.time % 20 < 5 && Math.floor(Math.random() * 200) % 50 === 0) {
+                    this.skill = this.physics.add.sprite(skillWidth, skillHeight, 'skill');
+                    this.skill.body.moves = false;
+                    this.skill.body.immovable = true;
+                    this.skill.x = gameWidth + skillWidth;
+                    this.skill.y = topBoundHeight + Math.random() * gameHeight * 0.375;
+                    for (let i = 0; i < this.obstacleQueue.length; i++) {
+                        while (this.obstacleQueue[i].obstacle.y - this.obstacleQueue[i].obstacle.height / 2 <= this.skill.y &&
+                            this.skill.y <= this.obstacleQueue[i].obstacle.y + this.obstacleQueue[i].obstacle.height / 2) {
+                            this.skill.y = topBoundHeight + Math.random() * gameHeight * 0.375;
+                        }
+                    }
+                    this.skill.anims.play('shine', true);
+                    this.skillOverlap = this.physics.add.overlap(this.player, this.skill);
+                }
+            }
+            //// 移動
+            if (this.skill !== undefined) {
+                this.skill.x -= 8 * this.speed * unit;
+            }
+            //// 吃到
+            if (this.skill !== undefined) {
+                if (this.skill.body.touching.none === false) {
+                    this.invincible = true;
+                    this.player.anims.play('invincible', true);
+                    this.player.flipX = false;
+                    this.player.flipY = false;
+                    this.skill.destroy();
+                    delete this.skill;
+                    setTimeout(() => {
+                        this.player.anims.play('float', true);
+                    }, 4500);
+                    setTimeout(() => {
+                        this.invincible = false;
+                    }, 5500);
+                }
+            }
+            //// 刪除
+            if (this.skill !== undefined) {
+                if (this.skill.x < -skillWidth) {
+                    this.skill.destroy();
+                    delete this.skill;
+                }
+            }
 
             // 關卡改變
             switch (this.time) {
                 case 60:
-                    this.red.setFillStyle(0xFF0000, 0.15);
+                    this.cover.alpha = .15;
                     this.speed = 1.5;
                     this.obstacleTypeAmount = 4;
                     this.createObstacleInterval = 1;
                     break;
                 case 30:
-                    this.red.setFillStyle(0xFF0000, 0.3);
+                    this.cover.alpha = .3;
                     this.speed = 2;
                     this.obstacleTypeAmount = 6;
                     this.createObstacleInterval = 0.25;
                     break;
                 case 0:
-                    this.red.setFillStyle(0xFF0000, 0);
+                    this.cover.alpha = 0;
                     this.playing = false;
                     clearInterval(this.timeId);
-                    this.red.setFillStyle(0xFFFFFF, 1);
-                    this.red.alpha = 0;
+                    this.cover.setFillStyle(0xFFFFFF, 1);
                     this.player.setVelocityX(0);
                     this.player.setVelocityY(0);
                     break;
             }
         }
         else {
-            if (Math.abs(this.player.x - gameWidth / 2) > 10) {
-                console.log(this.player);
-                if (Math.abs(this.player.x - gameWidth / 2) < 20) {
+            if (Math.abs(this.player.x - gameWidth / 2) > 10 * unit) {
+                if (Math.abs(this.player.x - gameWidth / 2) < 20 * unit) {
                     this.player.x = gameWidth / 2;
                 }
                 else {
@@ -314,6 +394,9 @@ const gamePlay = {
                         for (let i = 0; i < this.obstacleQueue.length; i++) {
                             this.obstacleQueue[i].obstacle.x -= r;
                         }
+                        if (this.skill !== undefined) {
+                            this.skill.x -= r;
+                        }
                     }
                     else {
                         this.player.x += r;
@@ -323,6 +406,9 @@ const gamePlay = {
                         this.bgGround.tilePositionX -= r;
                         for (let i = 0; i < this.obstacleQueue.length; i++) {
                             this.obstacleQueue[i].obstacle.x += r;
+                        }
+                        if (this.skill !== undefined) {
+                            this.skill.x += r;
                         }
                     }
 
@@ -336,7 +422,7 @@ const gamePlay = {
                         this.obstacleQueue[i].obstacle.alpha -= 0.01;
                     }
                     if (this.light === undefined) {
-                        this.light = this.add.tileSprite(gameWidth / 2, 300, 336, 600, 'light');
+                        this.light = this.add.tileSprite(gameWidth / 2, gameHeight * .375, gameWidth * .2625, gameHeight * .75, 'light');
                     }
                     this.player.anims.play('win', true);
                     this.player.flipX = false;
@@ -345,12 +431,17 @@ const gamePlay = {
                     this.light.tilePositionY += 3;
                     this.player.y -= 3;
 
-                    if (this.player.y < 400) {
-                        this.red.alpha += 0.01;
+                    if (this.player.y < gameHeight / 2) {
+                        this.cover.alpha += 0.01;
                     }
-                    if (this.player.y < 100) {
+                    if (this.player.y < gameHeight / 8) {
                         this.scene.start('gameEnd');
                     }
+                }
+                else {
+                    this.black.alpha += 0.03;
+                    this.gameOver.alpha += 0.03;
+                    this.tryAgain.alpha += 0.03;
                 }
             }
         }

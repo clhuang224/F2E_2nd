@@ -14,34 +14,46 @@ const gameEnd = {
     create: function () {
         this.bgColor = this.cameras.add(0, 0, gameWidth, gameHeight);
         this.bgColor.setBackgroundColor('#20552C');
-        this.bgBack = this.add.image(gameWidth / 2, gameHeight / 2, 'bg-back');
-        this.bgMiddle = this.add.image(gameWidth / 2, gameHeight / 2, 'bg-middle');
-        this.bgFront = this.add.image(gameWidth / 2, gameHeight / 2, 'bg-front');
-        this.bgGround = this.add.image(gameWidth - 888, gameHeight - 100, 'bg-ground');
-        this.controlImg = this.add.image(171.5, 759.5, 'control');
-        this.timeImg = this.add.image(1138, 757, 'time');
-        this.timeText = this.add.text(1160, 738, '00:00',
-            { fontSize: 32, lineSpacing: 38, padding: 0, margin: 0, fontFamily: 'Roboto', });
-        this.circle1 = this.add.circle(488.94 + 151.06, 142.65 + 151.06, 151.06, 0xFFFFFF);
+        this.bgBack = this.add.tileSprite(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 'bg-back');
+        this.bgMiddle = this.add.tileSprite(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 'bg-middle');
+        this.bgFront = this.add.tileSprite(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 'bg-front');
+        this.bgGround = this.add.tileSprite(gameWidth * 0.30625, gameHeight - groundHeight / 2, gameWidth * 1.3875, groundHeight, 'bg-ground');
+        this.controlImg = this.add.sprite(gameWidth * .13515625, gameHeight * .0375, 'control');
+        this.controlImg.x = gameWidth * .13398438;
+        this.controlImg.y = gameHeight * .949375;
+        this.timeImg = this.add.sprite(gameWidth * .01953125, gameHeight * .3125, 'time');
+        this.timeImg.x = gameWidth * .8890625;
+        this.timeImg.y = gameHeight * .94625;
+        this.timeText = this.add.text(gameWidth * .90625, gameHeight * .9225,
+            '00:00'
+            , { fontSize: gameHeight * .04, lineSpacing: gameHeight * .0475, padding: 0, margin: 0, fontFamily: 'Roboto', });
+
+        this.circle1 = this.add.circle(gameWidth / 2, gameHeight * .3671375, gameWidth * .118015625, 0xFFFFFF);
         this.circle1.alpha = 0.2;
-        this.circle2 = this.add.circle(467.58 + 172.42, 121.29 + 172.42, 172.42, 0xFFFFFF);
+        this.circle2 = this.add.circle(gameWidth / 2, gameHeight * .3671375, gameWidth * .134703125, 0xFFFFFF);
         this.circle2.alpha = 0.2;
-        this.circle3 = this.add.circle(455.37 + 184.625, 109.08 + 184.625, 184.625, 0xFFFFFF);
+        this.circle3 = this.add.circle(gameWidth / 2, gameHeight * .3671375, gameWidth * .14423828125, 0xFFFFFF);
         this.circle3.alpha = 0.2;
-        this.player = this.add.image(640, 293.71, 'player-end');
-        this.congratulations = this.add.image(639.665, 148.4, 'congratulations');
+        this.player = this.add.sprite(gameWidth / 5, gameHeight * .24, 'player-end');
+        this.player.x = gameWidth / 2;
+        this.player.y = gameHeight * .3671375;
+
+        this.congratulations = this.add.sprite(gameWidth * .3703125, gameHeight * .15125, 'congratulations');
+        this.congratulations.x = gameWidth * .49973828125;
+        this.congratulations.y = gameHeight * .04625;
         this.congratulations.alpha = 0;
-        this.playAgain = this.add.image(640, 266, 'play-again');
+        this.playAgain = this.add.sprite(buttonWidth, buttonHeight, 'play-again');
+        this.playAgain.x = gameWidth * .5;
+        this.playAgain.y = gameHeight * .3325;
         this.playAgain.alpha = 0;
         this.keyboard = this.input.keyboard.createCursorKeys();
-
     },
     update: function () {
-        if (this.player.y < 520) {
-            this.player.y += 3;
-            this.circle1.y += 3;
-            this.circle2.y += 3;
-            this.circle3.y += 3;
+        if (this.player.y < gameHeight * .65) {
+            this.player.y += 3 * unit;
+            this.circle1.y += 3 * unit;
+            this.circle2.y += 3 * unit;
+            this.circle3.y += 3 * unit;
         }
         else {
             this.congratulations.alpha += 0.01;
