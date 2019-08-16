@@ -1,4 +1,3 @@
-
 const gamePlay = {
     key: 'gamePlay',
     preload: function () {
@@ -19,9 +18,12 @@ const gamePlay = {
         this.load.image('black', './img/black.png');
         this.load.image('game-over', './img/txt-game-over.png');
         this.load.image('try-again', './img/btn-try-again.png');
+        this.load.image('light', './img/light.png');
 
         this.playing = true;
-        this.time = 90;
+        this.lose = false;
+        this.replay = false;
+        this.time = 3;
         this.speed = 1;
         this.lastObstacleTime = 90;
         this.lastObstacleType = '';
@@ -84,7 +86,13 @@ const gamePlay = {
         this.anims.create({
             key: 'dead',
             frames: this.anims.generateFrameNumbers('player', { start: 6, end: 6 }),
-            frameRate: 5,
+            frameRate: 1,
+            repeat: -1,
+        });
+        this.anims.create({
+            key: 'win',
+            frames: this.anims.generateFrameNumbers('player', { start: 0, end: 0 }),
+            frameRate: 1,
             repeat: -1,
         });
 
@@ -125,15 +133,16 @@ const gamePlay = {
 
         // 紅色
         this.red = this.add.rectangle(gameWidth / 2, gameHeight / 2, gameWidth, gameHeight, 0xFF0000, 0);
+        this.red.depth = 10;
 
         // 計時
         this.timeId = setInterval(() => {
-            this.time -= 1;
-            this.timeText.setText(`${String(Math.floor(this.time / 60)).padStart(2, '0')}:${String(this.time % 60).padStart(2, '0')}`);
-            if (this.playing === false) {
+            this.time -= 0.5;
+            this.timeText.setText(`${String(Math.floor(this.time / 60)).padStart(2, '0')}:${String(Math.floor(this.time % 60)).padStart(2, '0')}`);
+            if (this.time === 0 || this.playing === false) {
                 clearInterval(this.timeId);
             }
-        }, 1000);
+        }, 500);
 
         // 鍵盤
         this.input.keyboard.on('keyup', (event) => {
@@ -185,9 +194,9 @@ const gamePlay = {
                         break;
                 }
             }
-            else {
+            if (this.replay) {
                 if (event.keyCode === SPACE) {
-                    this.scene.start('gamePlay');
+                    this.scene.start('gameStart');
                 }
             }
         })
@@ -242,8 +251,10 @@ const gamePlay = {
             }
             /// 撞到
             for (let i = 0; i < this.obstacleQueue.length; i++) {
-                if (this.obstacleQueue[i].obstacle.body.touching.none == false) {
+                if (this.obstacleQueue[i].obstacle.body.touching.none === false) {
                     this.playing = false;
+                    this.replay = true;
+                    this.lose = true;
                     this.player.anims.play('dead', true);
                     this.black = this.add.image(gameWidth / 2, gameHeight / 2, 'black');
                     this.gameOver = this.add.image(1019.435, 366.925, 'game-over');
@@ -278,13 +289,72 @@ const gamePlay = {
                 case 0:
                     this.red.setFillStyle(0xFF0000, 0);
                     this.playing = false;
+                    clearInterval(this.timeId);
+                    this.red.setFillStyle(0xFFFFFF, 1);
+                    this.red.alpha = 0;
+                    this.player.setVelocityX(0);
+                    this.player.setVelocityY(0);
                     break;
             }
         }
         else {
-            this.player.body.moves = false;
-            this.player.body.immovable = true;
+            if (Math.abs(this.player.x - gameWidth / 2) > 10) {
+                console.log(this.player);
+                if (Math.abs(this.player.x - gameWidth / 2) < 20) {
+                    this.player.x = gameWidth / 2;
+                }
+                else {
+                    let r = Math.log(Math.abs(this.player.x - gameWidth / 2));
+                    if (this.player.x > gameWidth / 2) {
+                        this.player.x -= r;
+                        this.bgBack.tilePositionX += r;
+                        this.bgMiddle.tilePositionX += r;
+                        this.bgFront.tilePositionX += r;
+                        this.bgGround.tilePositionX += r;
+                        for (let i = 0; i < this.obstacleQueue.length; i++) {
+                            this.obstacleQueue[i].obstacle.x -= r;
+                        }
+                    }
+                    else {
+                        this.player.x += r;
+                        this.bgBack.tilePositionX -= r;
+                        this.bgMiddle.tilePositionX -= r;
+                        this.bgFront.tilePositionX -= r;
+                        this.bgGround.tilePositionX -= r;
+                        for (let i = 0; i < this.obstacleQueue.length; i++) {
+                            this.obstacleQueue[i].obstacle.x += r;
+                        }
+                    }
+
+                }
+            }
+            else {
+                if (this.lose === false) {
+                    this.player.body.moves = false;
+                    this.player.body.immovable = true;
+                    for (let i = 0; i < this.obstacleQueue.length; i++) {
+                        this.obstacleQueue[i].obstacle.alpha -= 0.01;
+                    }
+                    if (this.light === undefined) {
+                        this.light = this.add.tileSprite(gameWidth / 2, 300, 336, 600, 'light');
+                    }
+                    this.player.anims.play('win', true);
+                    this.player.flipX = false;
+                    this.player.flipY = false;
+                    this.player.angle = -45;
+                    this.light.tilePositionY += 3;
+                    this.player.y -= 3;
+
+                    if (this.player.y < 400) {
+                        this.red.alpha += 0.01;
+                    }
+                    if (this.player.y < 100) {
+                        this.scene.start('gameEnd');
+                    }
+                }
+            }
         }
+
     }
 
 }
