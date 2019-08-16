@@ -63,7 +63,24 @@ const gamePlay = {
         this.lastObstacleType = '';
         this.obstacleTypeAmount = 2;
         this.createObstacleInterval = 2;
-        this.obstacleQueue = new Array();
+        if (this.obstacleQueue !== undefined) {
+            while (this.obstacleQueue.length > 0) {
+                this.obstacleQueue[0].overlap.destroy();
+                delete this.obstacleQueue[0].overlap;
+                this.obstacleQueue[0].obstacle.destroy();
+                delete this.obstacleQueue[0].obstacle;
+                this.obstacleQueue.shift();
+            }
+        }
+        else {
+            this.obstacleQueue = new Array();
+        }
+        if (this.skill !== undefined) {
+            this.skill.destroy();
+            delete this.skill;
+            this.skillOverlap.destroy();
+            delete this.skillOverlap;
+        }
         // 動畫
         this.anims.create({
             key: 'shine',
@@ -101,7 +118,6 @@ const gamePlay = {
             frameRate: 1,
             repeat: -1,
         });
-
 
         // 背景
         this.bgColor = this.cameras.add(0, 0, gameWidth, gameHeight);
