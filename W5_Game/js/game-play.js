@@ -20,16 +20,6 @@ const gamePlay = {
         this.load.image('try-again', './img/btn-try-again.png');
         this.load.image('light', './img/light.png');
 
-        this.playing = true;
-        this.lose = false;
-        this.invincible = false;
-        this.time = 61;
-        this.speed = 1;
-        this.lastObstacleTime = 95;
-        this.lastObstacleType = '';
-        this.obstacleTypeAmount = 2;
-        this.createObstacleInterval = 2;
-        this.obstacleQueue = new Array();
         this.obstacleConfig = {
             'obstacle-1': {
                 width: gameWidth * .19375,
@@ -64,6 +54,16 @@ const gamePlay = {
         }
     },
     create: function () {
+        this.playing = true;
+        this.lose = false;
+        this.invincible = false;
+        this.time = 90;
+        this.speed = 1;
+        this.lastObstacleTime = 95;
+        this.lastObstacleType = '';
+        this.obstacleTypeAmount = 2;
+        this.createObstacleInterval = 2;
+        this.obstacleQueue = new Array();
         // 動畫
         this.anims.create({
             key: 'shine',
@@ -289,7 +289,6 @@ const gamePlay = {
             /// 撞到
             for (let i = 0; i < this.obstacleQueue.length; i++) {
                 if (this.obstacleQueue[i].obstacle.body.touching.none === false && this.invincible === false) {
-                    console.log(this.obstacleQueue[i].obstacle);
                     this.playing = false;
                     this.lose = true;
                     this.player.anims.play('dead', true);

@@ -40,7 +40,7 @@ const gameEnd = {
 
         this.congratulations = this.add.sprite(gameWidth * .3703125, gameHeight * .15125, 'congratulations');
         this.congratulations.x = gameWidth * .49973828125;
-        this.congratulations.y = gameHeight * .04625;
+        this.congratulations.y = gameHeight * .1855;
         this.congratulations.alpha = 0;
         this.playAgain = this.add.sprite(buttonWidth, buttonHeight, 'play-again');
         this.playAgain.x = gameWidth * .5;
