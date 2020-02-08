@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zn-TW">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>口罩存量查詢</title>
+    <!-- font -->
+    <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
+    <!-- css -->
+    <link rel="stylesheet" href="css/all.css">
+</head>
+
+<body>
+    <div class="sidebar">
+        <div class="top">
+            <h1 class="title">口罩存量查詢</h1>
+            <div class="search">
+                <input type="text" class="search-input">
+                <div class="search-img"></div>
+            </div>
+            <div class="fileters">
+                <input type="checkbox" name="mask" id="adult">
+                <label for="adult">成人口罩</label>
+                <input type="checkbox" name="mask" id="child">
+                <label for="child">兒童口罩</label>
+            </div>
+        </div>
+        <ul class="list">
+            <li class="item">
+                <h2 class="title">某個藥局</h2>
+                <div class="address">新北市中和區一路二號</div>
+                <div class="phone">(02) 2345 - 6789</div>
+                <div class="time">12 : 00 - 16 : 00</div>
+            </li>
+        </ul>
+    </div>
+    <div id="map" class="map"></div>
+    <!-- js -->
+    <script src="js/all.js"></script>
+</body>
+
+</html>
