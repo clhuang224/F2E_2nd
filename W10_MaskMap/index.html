@@ -12,30 +12,87 @@
 </head>
 
 <body>
-    <div class="sidebar">
-        <div class="top">
-            <h1 class="title">口罩存量查詢</h1>
-            <div class="search">
-                <input type="text" class="search-input">
-                <div class="search-img"></div>
+    <div class="wrap">
+        <div class="sidebar">
+            <div class="top">
+                <h1 class="title">口罩存量查詢</h1>
+                <div class="search">
+                    <input type="text" class="search-input">
+                    <button class="search-button"></button>
+                </div>
+                <ul class="checkboxes">
+                    <input type="checkbox" name="mask" id="adult" class="checkbox">
+                    <label for="adult">成人口罩</label>
+                    <input type="checkbox" name="mask" id="child" class="checkbox">
+                    <label for="child">兒童口罩</label>
+                </ul>
             </div>
-            <div class="fileters">
-                <input type="checkbox" name="mask" id="adult">
-                <label for="adult">成人口罩</label>
-                <input type="checkbox" name="mask" id="child">
-                <label for="child">兒童口罩</label>
-            </div>
+            <ul class="list">
+                <li class="item">
+                    <h2 class="title">某個藥局</h2>
+                    <div class="data address">新北市中和區一路二號</div>
+                    <div class="data phone">(02) 2345 - 6789</div>
+                    <div class="data time">12 : 00 - 16 : 00</div>
+                    <div class="mask">
+                        <div class="adult">成人口罩：<span>4</span></div>
+                        <div class="child">兒童口罩：<span>0</span></div>
+                    </div>
+                </li>
+                <li class="item">
+                    <h2 class="title">某個藥局</h2>
+                    <div class="data address">新北市中和區一路二號</div>
+                    <div class="data phone">(02) 2345 - 6789</div>
+                    <div class="data time">12 : 00 - 16 : 00</div>
+                    <div class="mask">
+                        <div class="adult">成人口罩：<span>4</span></div>
+                        <div class="child">兒童口罩：<span>0</span></div>
+                    </div>
+                </li>
+                <li class="item">
+                    <h2 class="title">某個藥局</h2>
+                    <div class="data address">新北市中和區一路二號</div>
+                    <div class="data phone">(02) 2345 - 6789</div>
+                    <div class="data time">12 : 00 - 16 : 00</div>
+                    <div class="mask">
+                        <div class="adult">成人口罩：<span>4</span></div>
+                        <div class="child">兒童口罩：<span>0</span></div>
+                    </div>
+                </li>
+                <li class="item">
+                    <h2 class="title">某個藥局</h2>
+                    <div class="data address">新北市中和區一路二號</div>
+                    <div class="data phone">(02) 2345 - 6789</div>
+                    <div class="data time">12 : 00 - 16 : 00</div>
+                    <div class="mask">
+                        <div class="adult">成人口罩：<span>4</span></div>
+                        <div class="child">兒童口罩：<span>0</span></div>
+                    </div>
+                </li>
+                <li class="item">
+                    <h2 class="title">某個藥局</h2>
+                    <div class="data address">新北市中和區一路二號</div>
+                    <div class="data phone">(02) 2345 - 6789</div>
+                    <div class="data time">12 : 00 - 16 : 00</div>
+                    <div class="mask">
+                        <div class="adult">成人口罩：<span>4</span></div>
+                        <div class="child">兒童口罩：<span>0</span></div>
+                    </div>
+                </li>
+                <li class="item">
+                    <h2 class="title">某個藥局</h2>
+                    <div class="data address">新北市中和區一路二號</div>
+                    <div class="data phone">(02) 2345 - 6789</div>
+                    <div class="data time">12 : 00 - 16 : 00</div>
+                    <div class="mask">
+                        <div class="adult">成人口罩：<span>4</span></div>
+                        <div class="child">兒童口罩：<span>0</span></div>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <ul class="list">
-            <li class="item">
-                <h2 class="title">某個藥局</h2>
-                <div class="address">新北市中和區一路二號</div>
-                <div class="phone">(02) 2345 - 6789</div>
-                <div class="time">12 : 00 - 16 : 00</div>
-            </li>
-        </ul>
+        <div id="map" class="map"></div>
     </div>
-    <div id="map" class="map"></div>
+
     <!-- js -->
     <script src="js/all.js"></script>
 </body>
