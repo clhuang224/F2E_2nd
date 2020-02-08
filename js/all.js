@@ -38,6 +38,16 @@ let data = [
         workURL: './W4_Payment/',
         codeURL: 'https://github.com/clhuang224/F2E_2nd/tree/master/W4_Payment',
         imageURL: 'img/w4.png',
+    },
+    {
+        week: 5,
+        tab: 'W5 Game',
+        title: '第五關： 90 秒挑戰遊戲',
+        introURL: 'https://challenge.thef2e.com/news/16',
+        articleURL: 'https://clhuang224.github.io/TechBlog/2019/08/13/20190813-f2e-2-w5-Game/',
+        workURL: './W5_Game/',
+        codeURL: 'https://github.com/clhuang224/F2E_2nd/tree/master/W5_Game',
+        imageURL: 'img/w5.png',
     }
 ];
 
