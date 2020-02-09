@@ -5,87 +5,47 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>口罩存量查詢</title>
+    <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <!-- font -->
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
     <!-- css -->
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+        integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+        crossorigin="" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
     <link rel="stylesheet" href="css/all.css">
 </head>
 
 <body>
-    <div class="wrap">
+    <div id="vue" class="wrap">
         <div class="sidebar">
             <div class="top">
                 <h1 class="title">口罩存量查詢</h1>
                 <div class="search">
-                    <input type="text" class="search-input">
+                    <input type="text" class="search-input" v-model="userInput">
                     <button class="search-button"></button>
                 </div>
                 <ul class="checkboxes">
-                    <input type="checkbox" name="mask" id="adult" class="checkbox">
+                    <input type="checkbox" name="mask" id="adult" class="checkbox"
+                        :class="{active: checkboxes[0] === true}" v-model="checkboxes[0]">
                     <label for="adult">成人口罩</label>
-                    <input type="checkbox" name="mask" id="child" class="checkbox">
+                    <input type="checkbox" name="mask" id="child" class="checkbox"
+                        :class="{active: checkboxes[1] === true}" v-model="checkboxes[1]">
                     <label for="child">兒童口罩</label>
                 </ul>
             </div>
             <ul class="list">
-                <li class="item">
-                    <h2 class="title">某個藥局</h2>
-                    <div class="data address">新北市中和區一路二號</div>
-                    <div class="data phone">(02) 2345 - 6789</div>
-                    <div class="data time">12 : 00 - 16 : 00</div>
+                <li class="item" v-for="(item,index,key) of sortedData" :key="key"
+                    v-if="item.distance < 1000 && isVisable(item.properties.mask_adult,item.properties.mask_child)">
+                    <h2 class="title">{{item.properties.name}}</h2>
+                    <div class="distance">{{item.distance | round}} 公尺</div>
+                    <div class="data address">{{item.properties.address}}</div>
+                    <div class="data phone">{{item.properties.phone}}</div>
                     <div class="mask">
-                        <div class="adult">成人口罩：<span>4</span></div>
-                        <div class="child">兒童口罩：<span>0</span></div>
-                    </div>
-                </li>
-                <li class="item">
-                    <h2 class="title">某個藥局</h2>
-                    <div class="data address">新北市中和區一路二號</div>
-                    <div class="data phone">(02) 2345 - 6789</div>
-                    <div class="data time">12 : 00 - 16 : 00</div>
-                    <div class="mask">
-                        <div class="adult">成人口罩：<span>4</span></div>
-                        <div class="child">兒童口罩：<span>0</span></div>
-                    </div>
-                </li>
-                <li class="item">
-                    <h2 class="title">某個藥局</h2>
-                    <div class="data address">新北市中和區一路二號</div>
-                    <div class="data phone">(02) 2345 - 6789</div>
-                    <div class="data time">12 : 00 - 16 : 00</div>
-                    <div class="mask">
-                        <div class="adult">成人口罩：<span>4</span></div>
-                        <div class="child">兒童口罩：<span>0</span></div>
-                    </div>
-                </li>
-                <li class="item">
-                    <h2 class="title">某個藥局</h2>
-                    <div class="data address">新北市中和區一路二號</div>
-                    <div class="data phone">(02) 2345 - 6789</div>
-                    <div class="data time">12 : 00 - 16 : 00</div>
-                    <div class="mask">
-                        <div class="adult">成人口罩：<span>4</span></div>
-                        <div class="child">兒童口罩：<span>0</span></div>
-                    </div>
-                </li>
-                <li class="item">
-                    <h2 class="title">某個藥局</h2>
-                    <div class="data address">新北市中和區一路二號</div>
-                    <div class="data phone">(02) 2345 - 6789</div>
-                    <div class="data time">12 : 00 - 16 : 00</div>
-                    <div class="mask">
-                        <div class="adult">成人口罩：<span>4</span></div>
-                        <div class="child">兒童口罩：<span>0</span></div>
-                    </div>
-                </li>
-                <li class="item">
-                    <h2 class="title">某個藥局</h2>
-                    <div class="data address">新北市中和區一路二號</div>
-                    <div class="data phone">(02) 2345 - 6789</div>
-                    <div class="data time">12 : 00 - 16 : 00</div>
-                    <div class="mask">
-                        <div class="adult">成人口罩：<span>4</span></div>
-                        <div class="child">兒童口罩：<span>0</span></div>
+                        <div class="adult" :class="{stock: item.properties.mask_adult > 0}">
+                            成人口罩：<span>{{item.properties.mask_adult}}</span></div>
+                        <div class="child" :class="{stock: item.properties.mask_child > 0}">
+                            兒童口罩：<span>{{item.properties.mask_child}}</span></div>
                     </div>
                 </li>
             </ul>
@@ -94,6 +54,11 @@
     </div>
 
     <!-- js -->
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
+        integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
+        crossorigin=""></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
     <script src="js/all.js"></script>
 </body>
 
