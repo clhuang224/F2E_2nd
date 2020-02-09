@@ -25,18 +25,26 @@
                     <input type="text" class="search-input" v-model="userInput">
                     <button class="search-button"></button>
                 </div>
-                <ul class="checkboxes">
-                    <input type="checkbox" name="mask" id="adult" class="checkbox"
-                        :class="{active: checkboxes[0] === true}" v-model="checkboxes[0]">
-                    <label for="adult">成人口罩</label>
-                    <input type="checkbox" name="mask" id="child" class="checkbox"
-                        :class="{active: checkboxes[1] === true}" v-model="checkboxes[1]">
-                    <label for="child">兒童口罩</label>
-                </ul>
+                <div class="filter">
+                    <ul class="checkboxes">
+                        <input type="checkbox" name="mask" id="adult" class="checkbox"
+                            :class="{active: checkboxes[0] === true}" v-model="checkboxes[0]">
+                        <label for="adult">成人口罩</label>
+                        <input type="checkbox" name="mask" id="child" class="checkbox"
+                            :class="{active: checkboxes[1] === true}" v-model="checkboxes[1]">
+                        <label for="child">兒童口罩</label>
+                    </ul>
+                    <select name="distance" class="distance" v-model="distance">
+                        <option class="option" value="1000">1公里</option>
+                        <option class="option" value="5000">5公里</option>
+                        <option class="option" value="10000">10公里</option>
+                    </select>
+                </div>
+
             </div>
             <ul class="list">
                 <li class="item" v-for="(item,index,key) of sortedData" :key="key"
-                    v-if="item.distance < 1000 && isVisable(item.properties.mask_adult,item.properties.mask_child)">
+                    v-if="item.distance < distance && isVisable(item.properties.mask_adult,item.properties.mask_child)">
                     <h2 class="title">{{item.properties.name}}</h2>
                     <div class="distance">{{item.distance | round}} 公尺</div>
                     <div class="data address">{{item.properties.address}}</div>
@@ -58,7 +66,7 @@
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
         integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
         crossorigin=""></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
     <script src="js/all.js"></script>
 </body>
 

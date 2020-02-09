@@ -106,10 +106,29 @@ label{
 	cursor: pointer;
 }
 
-.sidebar .top .checkboxes {
+.sidebar .top .filter{
 	margin-top: 20px;
 	display: flex;
 	justify-content: flex-end;
+	align-items: center;
+}
+
+.sidebar .top .distance{
+	margin-left: 20px;
+	width: auto;
+	font-size: 18px;
+	font-family: 'Noto Sans TC', sans-serif;
+	border: none;
+	border-radius: 5px;
+	text-align-last: right;
+}
+
+.sidebar .top .distance .option{
+	direction: rtl;
+}
+
+.sidebar .top .checkboxes {
+	display: flex;
 	align-items: center;
 	font-size: 18px;
 }

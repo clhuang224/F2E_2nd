@@ -7,6 +7,7 @@ let vue = new Vue({
         data: [],
         userInput: '您的位置',
         checkboxes: [false, false],
+        distance: 1000,
     },
     filters: {
         round: function (value) {
