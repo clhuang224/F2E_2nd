@@ -5,9 +5,11 @@ let vue = new Vue({
         center: [23.6334772, 120.852944], // 緯度 經度
         zoom: 8.25,
         data: [],
-        userInput: '您的位置',
+        searchInput: '',
         checkboxes: [false, false],
         distance: 1000,
+        searching: false,
+        geoloation: false,
     },
     filters: {
         round: function (value) {
@@ -16,7 +18,7 @@ let vue = new Vue({
     },
     computed: {
         sortedData: function () {
-            // 篩選、計算所有資料與中心的距離並升冪排序
+            // 計算所有資料與中心的距離並升冪排序
             let result = this.data.slice();
             let resultLength = result.length;
             for (let i = 0; i < resultLength; i++) {
@@ -25,6 +27,17 @@ let vue = new Vue({
             result.sort(function (a, b) {
                 return a.distance - b.distance;
             });
+            return result;
+        },
+        searchingList: function () {
+            let result = [
+                {
+                    name: '您的位置',
+                    address: '',
+                    type: 'self',
+                }
+            ];
+
             return result;
         }
     },
@@ -36,6 +49,11 @@ let vue = new Vue({
                 Math.pow(Math.abs((b[1] - a[0]) * 11574), 2)
                 + Math.pow(Math.abs((b[0] - a[1]) * 111320 * Math.cos(Math.abs(b[0] + a[1]) / 2 / 180)), 2)
             );
+        },
+        computeLevenshteinDistance(str1, str2) {
+            let matrix = new Array(str1.length +1, str2.length + 1);
+
+
         },
         getData: function () {
             let that = this;
@@ -52,6 +70,7 @@ let vue = new Vue({
                 navigator.geolocation.getCurrentPosition(
                     // 有使用者定位
                     function (position) {
+                        that.geoloation = true;
                         that.center = [position.coords.latitude, position.coords.longitude];
                         that.zoom = 17;
                         that.map = L.map('map', {
@@ -105,15 +124,41 @@ let vue = new Vue({
             }
 
         },
-
+        changePosition(item){
+            if(item.type === 'self')
+            {
+                if (navigator.geolocation) {
+                    let that = this;
+                    navigator.geolocation.getCurrentPosition(
+                        // 有使用者定位
+                        function (position) {
+                            that.center = [position.coords.latitude, position.coords.longitude];
+                            that.zoom = 17;
+                            that.map.setView(new L.LatLng(that.center[0], that.center[1]), that.zoom);
+                        },
+                        // 無使用者定位
+                        function (err) {
+                            if (err.code === 1) {
+                                alert('您未提供位置資訊，請檢查您的瀏覽器設定。');
+                            }
+                        
+                        }
+                    );
+                }
+            }
+        }
     },
     beforeMount() {
         this.getData();
     },
     mounted() {
         this.openMap();
-    },
-    created() {
+        let that = this;
+        document.querySelector('body').addEventListener('click', function (event) {
+            if (event.target.classList.contains('search-input') !== true) {
+                that.searching = false;
+            }
+        });
     },
 });
 

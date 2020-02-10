@@ -39,7 +39,7 @@ table {
 	border-spacing: 0;
 }
 
-label{
+label {
 	cursor: pointer;
 }
 
@@ -62,7 +62,7 @@ label{
 	background-color: #fff;
 	width: 500px;
 	box-shadow: 0px 0px 7px #333333;
-	/* height: 100vh; */
+	z-index: 1;
 }
 
 .sidebar .top {
@@ -80,6 +80,7 @@ label{
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	position: relative;
 }
 
 .sidebar .top .search .search-input {
@@ -91,6 +92,17 @@ label{
 	padding: 10px 0 10px 10px;
 	font-size: 24px;
 	font-family: 'Noto Sans TC', sans-serif;
+}
+
+.sidebar .top .search.searching .search-input {
+	border-radius: 10px 0 0 0px;
+	border-color: #5cc;
+	border-style: solid;
+	border-width: 1px 0 0 1px;
+}
+
+.sidebar .top .search .search-input:focus::placeholder {
+	color: transparent;
 }
 
 .sidebar .top .search .search-button {
@@ -106,14 +118,42 @@ label{
 	cursor: pointer;
 }
 
-.sidebar .top .filter{
+.sidebar .top .search.searching .search-button {
+	border-radius: 0 10px 0px 0;
+	border-color: #5cc;
+	border-style: solid;
+	border-width: 1px 1px 0 0;
+}
+
+.sidebar .top .search .search-list {
+	position: absolute;
+	top: 100%;
+	border-radius: 0 0 10px 10px;
+	background-color: #fff;
+	border: #5cc 1px solid;
+	left: 0;
+	border-top: none;
+}
+
+.sidebar .top .search .search-item {
+	width: 448px;
+	font-size: 24px;
+	padding: 10px;
+	cursor: pointer;
+}
+
+.sidebar .top .search .search-item:hover{
+	background-color: #ddd;
+}
+
+.sidebar .top .filter {
 	margin-top: 20px;
 	display: flex;
 	justify-content: flex-end;
 	align-items: center;
 }
 
-.sidebar .top .distance{
+.sidebar .top .distance {
 	margin-left: 20px;
 	width: auto;
 	font-size: 18px;
@@ -123,7 +163,7 @@ label{
 	text-align-last: right;
 }
 
-.sidebar .top .distance .option{
+.sidebar .top .distance .option {
 	direction: rtl;
 }
 
@@ -140,7 +180,7 @@ label{
 	outline: none;
 }
 
-.sidebar .top .checkboxes .checkbox::before{
+.sidebar .top .checkboxes .checkbox::before {
 	content: '';
 	display: block;
 	width: 18px;
@@ -151,48 +191,48 @@ label{
 	cursor: pointer;
 }
 
-.sidebar .top .checkboxes .checkbox.active::before{
+.sidebar .top .checkboxes .checkbox.active::before {
 	background-image: url(../img/checkbox-true.png);
 }
 
 /* sidebar > list */
 
-.sidebar .list{
+.sidebar .list {
 	padding: 25px 7px 0px 25px;
 	overflow-y: scroll;
 	height: calc(100vh - 200px)
 }
 
-.sidebar .list::-webkit-scrollbar{
+.sidebar .list::-webkit-scrollbar {
 	width: 18px;
 }
 
-.sidebar .list::-webkit-scrollbar-thumb{
+.sidebar .list::-webkit-scrollbar-thumb {
 	border-radius: 10px;
 	box-shadow: inset 0 0 10px 10px #7be0e5;
-    border: solid 3px transparent;
+	border: solid 3px transparent;
 }
 
-.sidebar .list .item{
+.sidebar .list .item {
 	border-bottom: 3px solid #7be0e5;
 	padding-bottom: 5px;
 	margin-bottom: 25px;
 	position: relative;
 }
 
-.sidebar .list .item .title{
+.sidebar .list .item .title {
 	font-size: 24px;
 	width: 100%;
 	padding-bottom: 5px;
 }
 
-.sidebar .list .distance{
+.sidebar .list .distance {
 	position: absolute;
 	right: 0;
 	top: 0;
 }
 
-.sidebar .list .data{
+.sidebar .list .data {
 	width: calc(100% - 18px);
 	display: flex;
 	align-items: center;
@@ -200,7 +240,7 @@ label{
 	font-size: 18px;
 }
 
-.sidebar .list .data::before{
+.sidebar .list .data::before {
 	content: '';
 	display: block;
 	width: 18px;
@@ -210,27 +250,26 @@ label{
 	margin: 0 5px 0 15px;
 }
 
-.sidebar .list .address::before{
+.sidebar .list .address::before {
 	background-image: url(../img/address.png);
 }
 
-.sidebar .list .phone::before{
+.sidebar .list .phone::before {
 	background-image: url(../img/phone.png);
 }
 
-.sidebar .list .time::before{
+.sidebar .list .time::before {
 	background-image: url(../img/time.png);
 }
 
-.sidebar .list .mask{
+.sidebar .list .mask {
 	display: flex;
 	width: 100%;
 	justify-content: center;
 	font-size: 20px;
 }
 
-.sidebar .list .mask .adult,
-.sidebar .list .mask .child{
+.sidebar .list .mask .adult, .sidebar .list .mask .child {
 	width: 45%;
 	padding: 10px 20px;
 	margin: 20px 10px;
@@ -240,13 +279,14 @@ label{
 	justify-content: center;
 }
 
-.sidebar .list .mask .stock{
+.sidebar .list .mask .stock {
 	background-color: #7be0e5;
 }
 
 /* map */
 
-.map{
+.map {
 	width: calc(100% - 500px);
 	height: 100vh;
+	z-index: 0;
 }

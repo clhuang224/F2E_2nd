@@ -21,9 +21,16 @@
         <div class="sidebar">
             <div class="top">
                 <h1 class="title">口罩存量查詢</h1>
-                <div class="search">
-                    <input type="text" class="search-input" v-model="userInput">
-                    <button class="search-button"></button>
+                <div class="search" :class="{searching: searching === true}">
+                    <input type="text" id="search-input" class="search-input" placeholder="搜尋藥局" v-model="searchInput"
+                        @click="searching = true;" autocomplete="off">
+                    <button class="search-button" @click="search()"></button>
+                    <ul class="search-list" v-if="searching === true">
+                        <li class="search-item" v-for="(item, index, key) of searchingList" :key="key" @click="changePosition(item)">
+                            <div class="name">{{item.name}}</div>
+                            <div class="address">{{item.address}}</div>
+                        </li>
+                    </ul>
                 </div>
                 <div class="filter">
                     <ul class="checkboxes">
@@ -48,7 +55,7 @@
                     <h2 class="title">{{item.properties.name}}</h2>
                     <div class="distance">{{item.distance | round}} 公尺</div>
                     <div class="data address">{{item.properties.address}}</div>
-                    <div class="data phone">{{item.properties.phone}}</div>
+                    <a class="data phone" :href="'tel:'+item.properties.phone">{{item.properties.phone}}</a>
                     <div class="mask">
                         <div class="adult" :class="{stock: item.properties.mask_adult > 0}">
                             成人口罩：<span>{{item.properties.mask_adult}}</span></div>
