@@ -198,7 +198,7 @@ label {
 /* sidebar > list */
 
 .sidebar .list {
-	padding: 25px 7px 0px 25px;
+	padding: 0 7px 0 25px;
 	overflow-y: scroll;
 	height: calc(100vh - 200px)
 }
@@ -215,9 +215,13 @@ label {
 
 .sidebar .list .item {
 	border-bottom: 3px solid #7be0e5;
-	padding-bottom: 5px;
-	margin-bottom: 25px;
+	padding: 25px 25px 30px 25px;
 	position: relative;
+	cursor: pointer;
+}
+
+.sidebar .list .item:hover{
+	background-color: #f8f8f8;
 }
 
 .sidebar .list .item .title {
@@ -228,12 +232,12 @@ label {
 
 .sidebar .list .distance {
 	position: absolute;
-	right: 0;
-	top: 0;
+	right: 25px;
+	top: 25px;
 }
 
 .sidebar .list .data {
-	width: calc(100% - 18px);
+	width: auto;
 	display: flex;
 	align-items: center;
 	margin-top: 10px;
