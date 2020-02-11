@@ -27,9 +27,9 @@
                     <button class="search-button" @click="search()"></button>
                     <ul class="search-list" v-if="searching === true">
                         <li class="search-item" v-for="(item, index, key) of searchingList" :key="key"
-                            @click="changePosition(item)">
-                            <div class="name">{{item.name}}</div>
-                            <div class="address">{{item.address}}</div>
+                            @click="changePosition(item)" v-if="index < 10">
+                            <div class="name">{{item.properties.name}}</div>
+                            <div class="address">{{item.properties.address}}</div>
                         </li>
                     </ul>
                 </div>
@@ -52,7 +52,8 @@
             </div>
             <ul class="list">
                 <li class="item" v-for="(item,index,key) of sortedData" :key="key"
-                    v-if="item.distance < distance && isVisable(item.properties.mask_adult,item.properties.mask_child)">
+                    v-if="item.distance < distance && isVisable(item.properties.mask_adult,item.properties.mask_child)"
+                    @click="changePosition(item)">
                     <h2 class="title">{{item.properties.name}}</h2>
                     <div class="distance">{{item.distance | round}} 公尺</div>
                     <div class="data address">{{item.properties.address}}</div>

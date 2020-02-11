@@ -18,7 +18,7 @@ let vue = new Vue({
                 shadowSize: [58.5, 30], // size of the shadow
                 iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
                 shadowAnchor: [0, 28],  // the same for the shadow
-                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+                popupAnchor: [0, -80] // point from which the popup should open relative to the iconAnchor
             }),
             grey: L.icon({
                 iconUrl: '../img/mark-grey.png',
@@ -27,7 +27,7 @@ let vue = new Vue({
                 shadowSize: [58.5, 30], // size of the shadow
                 iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
                 shadowAnchor: [0, 28],  // the same for the shadow
-                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+                popupAnchor: [0, -80] // point from which the popup should open relative to the iconAnchor
             }),
             red: L.icon({
                 iconUrl: '../img/mark-red.png',
@@ -36,7 +36,7 @@ let vue = new Vue({
                 shadowSize: [58.5, 30], // size of the shadow
                 iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
                 shadowAnchor: [0, 28],  // the same for the shadow
-                popupAnchor: [-3, -76] // point from which the popup should open relative to the iconAnchor
+                popupAnchor: [0, -80] // point from which the popup should open relative to the iconAnchor
             }),
         },
     },
@@ -61,13 +61,18 @@ let vue = new Vue({
         searchingList: function () {
             let result = [
                 {
-                    name: '您的位置',
+                    properties:{
+                        name: '您的位置',
                     address: '',
                     type: 'self',
+                    }
                 }
             ];
-
-            return result;
+            let that = this;
+            return result.concat(this.sortedData.filter(
+                item => (item.properties.name.indexOf(that.searchInput) > 0 ||
+                    item.properties.address.indexOf(that.searchInput) > 0))
+            );
         }
     },
     methods: {
@@ -78,10 +83,6 @@ let vue = new Vue({
                 Math.pow(Math.abs((b[1] - a[0]) * 11574), 2)
                 + Math.pow(Math.abs((b[0] - a[1]) * 111320 * Math.cos(Math.abs(b[0] + a[1]) / 2 / 180)), 2)
             );
-        },
-        computeLevenshteinDistance(str1, str2) {
-            let matrix = new Array(str1.length + 1, str2.length + 1);
-
         },
         getData: function () {
             let that = this;
@@ -96,24 +97,25 @@ let vue = new Vue({
                     let schedule = that.data[i].properties.available.split('、');
                     let string = `<table class="schedule">
                     <tr>
-                        <th></th><th>一</th><th>二</th><th>三</th><th>四</th><th>五</th><th>六</th><th>日</th>
+                        <th class="th"></th><th class="th">一</th><th class="th">二</th><th class="th">三</th><th class="th">四</th><th class="th">五</th><th class="th">六</th><th class="th">日</th>
                     </tr>`;
                     for (let j = 0; j < schedule.length; j++) {
                         switch (j) {
                             case 0:
-                                string += `<tr><th>早上</th>`;
+                                string += `<tr><th class="th">早上</th>`;
+                                break;
                             case 7:
-                                string += `<tr><th>下午</th>`;
+                                string += `<tr><th class="th">下午</th>`;
+                                break;
                             case 14:
-                                string += `<tr><th>晚上</th>`;
-                            default:
-                                if (schedule[j].indexOf('看診') > 0) {
-                                    string += `<td>O</td>`;
-                                }
-                                else {
-                                    string += `<td>X</td>`;
-                                }
-
+                                string += `<tr><th class="th">晚上</th>`;
+                                break;
+                        }
+                        if (schedule[j].indexOf('看診') >= 0) {
+                            string += `<td class="td">◯</td>`;
+                        }
+                        else {
+                            string += `<td class="td"></td>`;
                         }
                         if (j % 7 === 6) {
                             string += `</tr>`;
@@ -122,7 +124,13 @@ let vue = new Vue({
                     string += `</table>`;
                     let popupString = `
                     <h2 class="title">${that.data[i].properties.name}</h2>
+                    <div class="address">${that.data[i].properties.address}</div>
+                    <div class="phone"><a :href="tel:${that.data[i].properties.phone}">${that.data[i].properties.phone}</a></div>
                     ${string}
+                    <div class="mask ${that.data[i].properties.mask_adult > 0}">
+                        成人：<span>${that.data[i].properties.mask_adult}</span></div>
+                    <div class="mask ${that.data[i].properties.mask_child > 0}">
+                        兒童：<span>${that.data[i].properties.mask_child}</span></div>
                     `;
 
                     // 放入 mark
@@ -183,7 +191,7 @@ let vue = new Vue({
             }
         },
         changePosition(item) {
-            if (item.type === 'self') {
+            if (item.properties.type === 'self') {
                 if (navigator.geolocation) {
                     let that = this;
                     navigator.geolocation.getCurrentPosition(
@@ -192,7 +200,7 @@ let vue = new Vue({
                             that.center = [position.coords.latitude, position.coords.longitude];
                             that.zoom = 17;
                             that.map.setView(new L.LatLng(that.center[0], that.center[1]), that.zoom);
-                            that.searchInput = item.name;
+                            that.searchInput = item.properties.name;
                         },
                         // 無使用者定位
                         function (err) {
@@ -202,6 +210,13 @@ let vue = new Vue({
                         }
                     );
                 }
+            }
+            else
+            {
+                this.center = [item.geometry.coordinates[1], item.geometry.coordinates[0]];
+                this.zoom = 17;
+                this.map.setView(new L.LatLng(this.center[0], this.center[1]), this.zoom);
+                this.searchInput = item.properties.name;
             }
         }
     },

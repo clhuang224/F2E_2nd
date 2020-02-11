@@ -81,6 +81,7 @@ label {
 	justify-content: center;
 	align-items: center;
 	position: relative;
+	z-index: 2;
 }
 
 .sidebar .top .search .search-input {
@@ -144,6 +145,11 @@ label {
 
 .sidebar .top .search .search-item:hover{
 	background-color: #ddd;
+}
+
+.sidebar .top .search .search-item .address{
+	color: #888;
+	font-size: 16px;
 }
 
 .sidebar .top .filter {
@@ -293,4 +299,56 @@ label {
 	width: calc(100% - 500px);
 	height: 100vh;
 	z-index: 0;
+}
+
+.map .leaflet-popup-content{
+	width: 250px !important;
+	display: flex;
+	justify-content: space-around;
+	flex-wrap: wrap;
+	font-size: 16px;
+}
+
+.map .leaflet-popup-content .title{
+	font-size: 20px;
+	font-weight: bold;
+	width: 100%;
+	padding: 3px;
+}
+
+.map .leaflet-popup-content .address{
+	width: 100%;
+}
+
+.map .leaflet-popup-content .phone{
+	width: 100%;
+	cursor: pointer;
+}
+
+.map .leaflet-popup-content .schedule{
+	margin-top: 10px;
+	border: #7be0e5 solid 2px;
+}
+.map .leaflet-popup-content .schedule .th,
+.map .leaflet-popup-content .schedule .td{
+	text-align: center;
+	padding: 3px;
+}
+.map .leaflet-popup-content .schedule .td{
+	color: #7be0e5;
+	font-weight: bold;
+}
+
+.map .leaflet-popup-content .mask{
+	width: 45%;
+	background-color: #ddd;
+	margin-top: 10px;
+	border-radius: 5px;
+	padding: 3px;
+	display: flex;
+	justify-content: center;
+}
+
+.map .leaflet-popup-content .mask.true{
+	background: #7be0e5;
 }
