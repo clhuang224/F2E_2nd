@@ -36,10 +36,12 @@
                 <div class="filter">
                     <ul class="checkboxes">
                         <input type="checkbox" name="mask" id="adult" class="checkbox"
-                            :class="{active: checkboxes[0] === true}" v-model="checkboxes[0]">
+                            :class="{active: checkboxes[0] === true}" v-model="checkboxes[0]"
+                            @change="updateStoreMarkers()">
                         <label for="adult">成人口罩</label>
                         <input type="checkbox" name="mask" id="child" class="checkbox"
-                            :class="{active: checkboxes[1] === true}" v-model="checkboxes[1]">
+                            :class="{active: checkboxes[1] === true}" v-model="checkboxes[1]"
+                            @change="updateStoreMarkers()">
                         <label for="child">兒童口罩</label>
                     </ul>
                     <select name="distance" class="distance" v-model="distance">
@@ -53,7 +55,7 @@
             <ul class="list">
                 <li class="item" v-for="(item,index,key) of sortedData" :key="key"
                     v-if="item.distance < distance && isVisable(item.properties.mask_adult,item.properties.mask_child)"
-                    @click="changePosition(item)">
+                    @dblclick="changePosition(item)" :data-id="item.properties.id">
                     <h2 class="title">{{item.properties.name}}</h2>
                     <div class="distance">{{item.distance | round}} 公尺</div>
                     <div class="data address">{{item.properties.address}}</div>

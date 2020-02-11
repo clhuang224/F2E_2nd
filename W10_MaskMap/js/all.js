@@ -10,8 +10,11 @@ let vue = new Vue({
         distance: 1000,
         searching: false,
         geoloation: false,
+        userMarker: null,
+        stroeMarkers: null,
         icon: {
             blue: L.icon({
+                name: 'blue',
                 iconUrl: '../img/mark-blue.png',
                 shadowUrl: '../img/shadow.png',
                 iconSize: [66, 90],
@@ -21,6 +24,7 @@ let vue = new Vue({
                 popupAnchor: [0, -80] // point from which the popup should open relative to the iconAnchor
             }),
             grey: L.icon({
+                name: 'grey',
                 iconUrl: '../img/mark-grey.png',
                 shadowUrl: '../img/shadow.png',
                 iconSize: [66, 90],
@@ -30,6 +34,7 @@ let vue = new Vue({
                 popupAnchor: [0, -80] // point from which the popup should open relative to the iconAnchor
             }),
             red: L.icon({
+                name: 'red',
                 iconUrl: '../img/mark-red.png',
                 shadowUrl: '../img/shadow.png',
                 iconSize: [66, 90],
@@ -61,17 +66,17 @@ let vue = new Vue({
         searchingList: function () {
             let result = [
                 {
-                    properties:{
+                    properties: {
                         name: '您的位置',
-                    address: '',
-                    type: 'self',
+                        address: '',
+                        type: 'self',
                     }
                 }
             ];
             let that = this;
             return result.concat(this.sortedData.filter(
-                item => (item.properties.name.indexOf(that.searchInput) > 0 ||
-                    item.properties.address.indexOf(that.searchInput) > 0))
+                item => (item.properties.name.indexOf(that.searchInput) >= 0 ||
+                    item.properties.address.indexOf(that.searchInput) >= 0))
             );
         }
     },
@@ -90,7 +95,7 @@ let vue = new Vue({
             xhr.open('get', 'https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json');
             xhr.onload = function () {
                 that.data = JSON.parse(xhr.responseText).features;
-                let markers = new L.markerClusterGroup().addTo(that.map);
+                that.storeMarkers = new L.markerClusterGroup().addTo(that.map);
                 for (let i = 0; i < that.data.length; i++) {
 
                     // 處理 popup的內容
@@ -134,21 +139,23 @@ let vue = new Vue({
                     `;
 
                     // 放入 mark
+
                     if (that.data[i].properties.mask_adult > 0 || that.data[i].properties.mask_child > 0) {
-                        markers.addLayer(L.marker(
+                        // 把 mark 的物件記在 data 裡
+                        that.data[i].marker = L.marker(
                             [that.data[i].geometry.coordinates[1], that.data[i].geometry.coordinates[0]],
-                            { icon: that.icon.blue }
-                        ).bindPopup(popupString));
+                            { icon: that.icon.blue }).bindPopup(popupString);
+                        that.storeMarkers.addLayer(that.data[i].marker);
                     }
                     else {
-                        markers.addLayer(L.marker(
+                        that.data[i].marker = L.marker(
                             [that.data[i].geometry.coordinates[1], that.data[i].geometry.coordinates[0]],
-                            { icon: that.icon.grey }
-                        ).bindPopup(popupString));
+                            { icon: that.icon.grey }).bindPopup(popupString);
+                        that.storeMarkers.addLayer(that.data[i].marker);
                     }
 
                 }
-                that.map.addLayer(markers);
+                that.map.addLayer(that.storeMarkers);
             };
             xhr.send();
         },
@@ -171,6 +178,8 @@ let vue = new Vue({
                         that.center = [position.coords.latitude, position.coords.longitude];
                         that.zoom = 17;
                         that.map.setView(new L.LatLng(that.center[0], that.center[1]), that.zoom);
+                        that.userMarker = L.marker([that.center[0], that.center[1]], { icon: that.icon.red });
+                        that.map.addLayer(that.userMarker);
                     }
                 );
             }
@@ -201,6 +210,11 @@ let vue = new Vue({
                             that.zoom = 17;
                             that.map.setView(new L.LatLng(that.center[0], that.center[1]), that.zoom);
                             that.searchInput = item.properties.name;
+                            if (that.userMarker !== null) {
+                                that.map.removeLayer(that.userMarker);
+                                that.userMarker = L.marker([that.center[0], that.center[1]], { icon: that.icon.red });
+                                that.map.addLayer(that.userMarker);
+                            }
                         },
                         // 無使用者定位
                         function (err) {
@@ -211,14 +225,128 @@ let vue = new Vue({
                     );
                 }
             }
-            else
-            {
+            else {
                 this.center = [item.geometry.coordinates[1], item.geometry.coordinates[0]];
                 this.zoom = 17;
                 this.map.setView(new L.LatLng(this.center[0], this.center[1]), this.zoom);
                 this.searchInput = item.properties.name;
+                if (this.userMarker !== null) {
+                    this.map.removeLayer(this.userMarker);
+                    this.userMarker = L.marker([this.center[0], this.center[1]], { icon: this.icon.red }).bindPopup(item.marker._popup._content);
+                    this.map.addLayer(this.userMarker);
+                }
             }
-        }
+            
+        },
+        updateStoreMarkers() {
+            this.map.removeLayer(this.storeMarkers);
+            for (let i = 0; i < this.data.length; i++) {
+                if (this.isVisable(this.data[i].properties.mask_adult, this.data[i].properties.mask_child)) {
+                    if (this.data[i].marker.options.icon.options.name === 'grey') {
+
+                        // 處理 popup的內容
+                        let schedule = this.data[i].properties.available.split('、');
+                        let string = `<table class="schedule">
+                    <tr>
+                        <th class="th"></th><th class="th">一</th><th class="th">二</th><th class="th">三</th><th class="th">四</th><th class="th">五</th><th class="th">六</th><th class="th">日</th>
+                    </tr>`;
+                        for (let j = 0; j < schedule.length; j++) {
+                            switch (j) {
+                                case 0:
+                                    string += `<tr><th class="th">早上</th>`;
+                                    break;
+                                case 7:
+                                    string += `<tr><th class="th">下午</th>`;
+                                    break;
+                                case 14:
+                                    string += `<tr><th class="th">晚上</th>`;
+                                    break;
+                            }
+                            if (schedule[j].indexOf('看診') >= 0) {
+                                string += `<td class="td">◯</td>`;
+                            }
+                            else {
+                                string += `<td class="td"></td>`;
+                            }
+                            if (j % 7 === 6) {
+                                string += `</tr>`;
+                            }
+                        }
+                        string += `</table>`;
+                        let popupString = `
+                    <h2 class="title">${this.data[i].properties.name}</h2>
+                    <div class="address">${this.data[i].properties.address}</div>
+                    <div class="phone"><a :href="tel:${this.data[i].properties.phone}">${this.data[i].properties.phone}</a></div>
+                    ${string}
+                    <div class="mask ${this.data[i].properties.mask_adult > 0}">
+                        成人：<span>${this.data[i].properties.mask_adult}</span></div>
+                    <div class="mask ${this.data[i].properties.mask_child > 0}">
+                        兒童：<span>${this.data[i].properties.mask_child}</span></div>
+                    `;
+
+                        this.storeMarkers.removeLayer(this.data[i].marker);
+                        this.data[i].marker = L.marker(
+                            [this.data[i].geometry.coordinates[1], this.data[i].geometry.coordinates[0]],
+                            { icon: this.icon.blue }).bindPopup(popupString);
+                        this.storeMarkers.addLayer(this.data[i].marker);
+                    }
+                }
+                else {
+                    if (this.data[i].marker.options.icon.options.name === 'blue') {
+
+                        // 處理 popup的內容
+                        let schedule = this.data[i].properties.available.split('、');
+                        let string = `<table class="schedule">
+                    <tr>
+                        <th class="th"></th><th class="th">一</th><th class="th">二</th><th class="th">三</th><th class="th">四</th><th class="th">五</th><th class="th">六</th><th class="th">日</th>
+                    </tr>`;
+                        for (let j = 0; j < schedule.length; j++) {
+                            switch (j) {
+                                case 0:
+                                    string += `<tr><th class="th">早上</th>`;
+                                    break;
+                                case 7:
+                                    string += `<tr><th class="th">下午</th>`;
+                                    break;
+                                case 14:
+                                    string += `<tr><th class="th">晚上</th>`;
+                                    break;
+                            }
+                            if (schedule[j].indexOf('看診') >= 0) {
+                                string += `<td class="td">◯</td>`;
+                            }
+                            else {
+                                string += `<td class="td"></td>`;
+                            }
+                            if (j % 7 === 6) {
+                                string += `</tr>`;
+                            }
+                        }
+                        string += `</table>`;
+                        let popupString = `
+                    <h2 class="title">${this.data[i].properties.name}</h2>
+                    <div class="address">${this.data[i].properties.address}</div>
+                    <div class="phone"><a :href="tel:${this.data[i].properties.phone}">${this.data[i].properties.phone}</a></div>
+                    ${string}
+                    <div class="mask ${this.data[i].properties.mask_adult > 0}">
+                        成人：<span>${this.data[i].properties.mask_adult}</span></div>
+                    <div class="mask ${this.data[i].properties.mask_child > 0}">
+                        兒童：<span>${this.data[i].properties.mask_child}</span></div>
+                    `;
+
+                        this.storeMarkers.removeLayer(this.data[i].marker);
+                        this.data[i].marker = L.marker(
+                            [this.data[i].geometry.coordinates[1], this.data[i].geometry.coordinates[0]],
+                            { icon: this.icon.grey }).bindPopup(popupString);
+                        this.storeMarkers.addLayer(this.data[i].marker);
+                    }
+                }
+                this.map.addLayer(this.storeMarkers);
+                this.map.removeLayer(this.userMarker);
+                this.map.addLayer(this.userMarker);
+            }
+
+        },
     },
     mounted() {
         this.openMap();
