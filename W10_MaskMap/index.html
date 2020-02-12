@@ -27,7 +27,7 @@
                     <button class="search-button" @click="search()"></button>
                     <ul class="search-list" v-if="searching === true">
                         <li class="search-item" v-for="(item, index, key) of searchingList" :key="key"
-                            @click="changePosition(item)" v-if="index < 10">
+                            @click="changePosition(item.geometry.coordinates[1],item.geometry.coordinates[0],item)" v-if="index < 10">
                             <div class="name">{{item.properties.name}}</div>
                             <div class="address">{{item.properties.address}}</div>
                         </li>
@@ -44,7 +44,7 @@
                             @change="updateStoreMarkers()">
                         <label for="child">兒童口罩</label>
                     </ul>
-                    <select name="distance" class="distance" v-model="distance">
+                    <select name="distance" class="distance" v-model="distance" v-if="userMarker !== null">
                         <option class="option" value="1000">1公里</option>
                         <option class="option" value="5000">5公里</option>
                         <option class="option" value="10000">10公里</option>
@@ -54,10 +54,10 @@
             </div>
             <ul class="list">
                 <li class="item" v-for="(item,index,key) of sortedData" :key="key"
-                    v-if="item.distance < distance && isVisable(item.properties.mask_adult,item.properties.mask_child)"
-                    @dblclick="changePosition(item)" :data-id="item.properties.id">
+                    v-if="(item.distance < distance || (userMarker === null && index < 10)) && isVisable(item.properties.mask_adult,item.properties.mask_child) "
+                    @dblclick="changePosition(item.geometry.coordinates[1],item.geometry.coordinates[0],item)" :data-id="item.properties.id">
                     <h2 class="title">{{item.properties.name}}</h2>
-                    <div class="distance">{{item.distance | round}} 公尺</div>
+                    <div class="distance" v-if="userMarker !== null">{{item.distance | round}} 公尺</div>
                     <div class="data address">{{item.properties.address}}</div>
                     <div class="data phone"><a :href="'tel:'+item.properties.phone">{{item.properties.phone}}</a></div>
                     <div class="mask">

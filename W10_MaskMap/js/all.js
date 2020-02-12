@@ -2,16 +2,28 @@ let vue = new Vue({
     el: '#vue',
     data: {
         map: null,
-        center: [23.6334772, 120.852944], // 緯度 經度
-        zoom: 8.25,
-        data: [],
-        searchInput: '',
-        checkboxes: [false, false],
-        distance: 1000,
-        searching: false,
-        geoloation: false,
         userMarker: null,
         stroeMarkers: null,
+        /**
+         * 地圖中心的緯經度
+         */
+        center: [23.6334772, 120.852944],
+        zoom: 7,
+        data: [],
+        /**
+         * @model 搜尋框輸入內容
+         */
+        searchInput: '',
+        /**
+         * @model filter: 顯示有成人口罩／孩童口罩的藥局
+         */
+        checkboxes: [false, false],
+        /**
+         * @model filter: 顯示多少距離以內的藥局清單
+         */
+        distance: 1000,
+        searching: false,
+        geolocation: false,
         icon: {
             blue: L.icon({
                 name: 'blue',
@@ -46,30 +58,52 @@ let vue = new Vue({
         },
     },
     filters: {
+        /**
+         * 做四捨五入
+         * @param {Number} value 任何數值
+         * @returns {Number} 四捨五入的數值
+         */
         round: function (value) {
             return Math.round(value);
         }
     },
     computed: {
+        /**
+         * 以與中心的距離由小到大排序的藥局資料列表
+         * （如果沒有中心點就不計算也不排序）
+         * 1. 計算所有資料與中心的距離，並放入資料陣列中
+         * 2. 將資料陣列以距離作升冪排序
+         */
         sortedData: function () {
-            // 計算所有資料與中心的距離並升冪排序
-            let result = this.data.slice();
-            let resultLength = result.length;
-            for (let i = 0; i < resultLength; i++) {
-                result[i].distance = this.computeDistance(this.center, result[i].geometry.coordinates);
+            if (this.userMarker !== null) {
+                let result = this.data.slice();
+                let resultLength = result.length;
+                for (let i = 0; i < resultLength; i++) {
+                    result[i].distance = this.computeDistance(this.center, result[i].geometry.coordinates);
+                }
+                result.sort(function (a, b) {
+                    return a.distance - b.distance;
+                });
+                return result;
             }
-            result.sort(function (a, b) {
-                return a.distance - b.distance;
-            });
-            return result;
+            else {
+                return this.data;
+            }
         },
+        /**
+         * 「您的位置」及其他與搜尋字串相符的資料列表
+         * 1. 比對 searchInput 是否存在於資料的名稱跟地址中
+         * 2. 回傳「您的位置」及篩選後的結果
+         */
         searchingList: function () {
             let result = [
                 {
+                    type: 'self',
                     properties: {
                         name: '您的位置',
-                        address: '',
-                        type: 'self',
+                    },
+                    geometry: {
+                        coordinates: [null, null]
                     }
                 }
             ];
@@ -81,6 +115,12 @@ let vue = new Vue({
         }
     },
     methods: {
+        /**
+         * 計算 a, b 兩點的距離
+         * @param {Number[]} a a 點的緯經度
+         * @param {Number[]} b b 點的緯經度
+         * @returns {Number} a 、 b 兩點的距離（公尺）
+         */
         computeDistance: function (a, b) {
             // 1 緯度 ≒ 11574 公尺
             // 1 經度 ≒ 111320 * cos(經度) 公尺
@@ -89,6 +129,13 @@ let vue = new Vue({
                 + Math.pow(Math.abs((b[0] - a[1]) * 111320 * Math.cos(Math.abs(b[0] + a[1]) / 2 / 180)), 2)
             );
         },
+        /**
+         * 1. 取得口罩地圖的資料
+         * 2. 將藥局的位置標示在地圖中，並將標示的物件存在 data 陣列裡
+         * @param {Number} a a 點的緯經度
+         * @param {Number} b b 點的緯經度
+         * @returns {Number} a 、 b 兩點的距離（公尺）
+         */
         getData: function () {
             let that = this;
             let xhr = new XMLHttpRequest();
@@ -97,7 +144,6 @@ let vue = new Vue({
                 that.data = JSON.parse(xhr.responseText).features;
                 that.storeMarkers = new L.markerClusterGroup().addTo(that.map);
                 for (let i = 0; i < that.data.length; i++) {
-
                     // 處理 popup的內容
                     let schedule = that.data[i].properties.available.split('、');
                     let string = `<table class="schedule">
@@ -137,54 +183,86 @@ let vue = new Vue({
                     <div class="mask ${that.data[i].properties.mask_child > 0}">
                         兒童：<span>${that.data[i].properties.mask_child}</span></div>
                     `;
-
-                    // 放入 mark
-
+                    // 放入 marker
                     if (that.data[i].properties.mask_adult > 0 || that.data[i].properties.mask_child > 0) {
-                        // 把 mark 的物件記在 data 裡
+                        // 把 marker 的實體記在 data 裡
                         that.data[i].marker = L.marker(
                             [that.data[i].geometry.coordinates[1], that.data[i].geometry.coordinates[0]],
                             { icon: that.icon.blue }).bindPopup(popupString);
+                        // 監聽 marker 雙擊
+                        that.data[i].marker.on('dblclick', function (event) {
+                            that.changePosition(
+                                that.data[i].geometry.coordinates[1],
+                                that.data[i].geometry.coordinates[0],
+                                that.data[i]);
+                        });
+
                         that.storeMarkers.addLayer(that.data[i].marker);
                     }
                     else {
+                        // 把 marker 的實體記在 data 裡
                         that.data[i].marker = L.marker(
                             [that.data[i].geometry.coordinates[1], that.data[i].geometry.coordinates[0]],
                             { icon: that.icon.grey }).bindPopup(popupString);
+                        // 監聽 marker 雙擊
+                        that.data[i].marker.on('dblclick', function (event) {
+                            that.changePosition(
+                                that.data[i].geometry.coordinates[1],
+                                that.data[i].geometry.coordinates[0],
+                                that.data[i]);
+                        });
                         that.storeMarkers.addLayer(that.data[i].marker);
                     }
-
                 }
                 that.map.addLayer(that.storeMarkers);
             };
             xhr.send();
         },
+        /**
+         * 1. 宣告 Leaflet 的實體
+         * 2. 放入 Open Street Map 的 tileLayer
+         * 3. 要求使用者的位置資訊
+         * 4. 有定位的話以定位位置為地圖中心，無則以整個台灣為起始畫面
+         */
         openMap: function () {
+            let that = this;
             // 設定地圖
             this.map = L.map('map', {
                 center: this.center,
-                zoom: this.zoom
+                zoom: this.zoom,
+                maxBounds: L.latLngBounds(L.latLng(27, 115), L.latLng(20, 127)),
+                minZoom: 7
             });
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
-                { attribution: 'Map data &copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' }).addTo(this.map);
+                { attribution: 'Map data &copy; <a target="_blank" href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a target="_blank" href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' }).addTo(this.map);
             // 定位
             if (navigator.geolocation) {
-                let that = this;
                 navigator.geolocation.getCurrentPosition(
-                    // 有使用者定位
+                    // 有使用者位置資訊就以定位為中心
                     function (position) {
-                        // 設定 map
-                        that.geoloation = true;
+                        that.geolocation = true;
                         that.center = [position.coords.latitude, position.coords.longitude];
-                        that.zoom = 17;
+                        that.zoom = 19;
                         that.map.setView(new L.LatLng(that.center[0], that.center[1]), that.zoom);
                         that.userMarker = L.marker([that.center[0], that.center[1]], { icon: that.icon.red });
                         that.map.addLayer(that.userMarker);
                     }
                 );
             }
+            // 雙擊地圖中心會改變
+            document.getElementById('map').addEventListener('dblclick', function (event) {
+                if (!event.target.classList.contains('leaflet-marker-icon')) {
+                    let latlng = that.map.mouseEventToLatLng(event);
+                    that.changePosition(latlng.lat, latlng.lng);
+                }
+            });
         },
-        // 依據 checkbox 回傳資料是否要顯示
+        /**
+         * 依據 checkbox 打勾的狀況，回傳以這個口罩數是否要顯示該筆資料
+         * @param {Number} adult 成人口罩數
+         * @param {Number} child 孩童口罩數
+         * @returns {Boolean} T/F
+         */
         isVisable: function (adult, child) {
             if (this.checkboxes[0] == true && this.checkboxes[1] == true) {
                 return (adult > 0 && child > 0);
@@ -199,51 +277,74 @@ let vue = new Vue({
                 return true;
             }
         },
-        changePosition(item) {
-            if (item.properties.type === 'self') {
-                if (navigator.geolocation) {
-                    let that = this;
-                    navigator.geolocation.getCurrentPosition(
-                        // 有使用者定位
-                        function (position) {
-                            that.center = [position.coords.latitude, position.coords.longitude];
-                            that.zoom = 17;
-                            that.map.setView(new L.LatLng(that.center[0], that.center[1]), that.zoom);
-                            that.searchInput = item.properties.name;
-                            if (that.userMarker !== null) {
-                                that.map.removeLayer(that.userMarker);
-                                that.userMarker = L.marker([that.center[0], that.center[1]], { icon: that.icon.red });
-                                that.map.addLayer(that.userMarker);
-                            }
-                        },
-                        // 無使用者定位
-                        function (err) {
-                            if (err.code === 1) {
-                                alert('您未提供位置資訊，請檢查您的瀏覽器設定。');
-                            }
-                        }
-                    );
-                }
-            }
-            else {
-                this.center = [item.geometry.coordinates[1], item.geometry.coordinates[0]];
-                this.zoom = 17;
+        /**
+         * 將地圖中心移到某個緯經度
+         * @param {Number} la 緯度
+         * @param {Number} lon 經度
+         * @param {Object} item 如果該點是藥局，參數要加上藥局資料的物件
+         */
+        changePosition(la, lon, item) {
+            // 移動到緯經度
+            if (!item) {
+                this.center = [la, lon];
+                this.zoom = 19;
                 this.map.setView(new L.LatLng(this.center[0], this.center[1]), this.zoom);
-                this.searchInput = item.properties.name;
                 if (this.userMarker !== null) {
                     this.map.removeLayer(this.userMarker);
+                }
+                this.userMarker = L.marker([this.center[0], this.center[1]], { icon: this.icon.red });
+                this.map.addLayer(this.userMarker);
+                this.searchInput = this.center;
+            }
+            // 移動到定位位置或藥局
+            else {
+                if (item.type === 'self') {
+                    if (navigator.geolocation) {
+                        let that = this;
+                        navigator.geolocation.getCurrentPosition(
+                            // 有使用者定位
+                            function (position) {
+                                that.center = [position.coords.latitude, position.coords.longitude];
+                                that.zoom = 19;
+                                that.map.setView(new L.LatLng(that.center[0], that.center[1]), that.zoom);
+                                that.searchInput = item.properties.name;
+                                if (that.userMarker !== null) {
+                                    that.map.removeLayer(that.userMarker);
+                                    that.userMarker = L.marker([that.center[0], that.center[1]], { icon: that.icon.red });
+                                    that.map.addLayer(that.userMarker);
+                                }
+                            },
+                            // 無使用者定位
+                            function (err) {
+                                if (err.code === 1) {
+                                    alert('您未提供位置資訊的權限，請檢查您的瀏覽器設定。');
+                                }
+                            }
+                        );
+                    }
+                }
+                else {
+                    this.center = [item.geometry.coordinates[1], item.geometry.coordinates[0]];
+                    this.zoom = 19;
+                    this.map.setView(new L.LatLng(this.center[0], this.center[1]), this.zoom);
+                    this.searchInput = item.properties.name;
+                    if (this.userMarker !== null) {
+                        this.map.removeLayer(this.userMarker);
+                    }
                     this.userMarker = L.marker([this.center[0], this.center[1]], { icon: this.icon.red }).bindPopup(item.marker._popup._content);
                     this.map.addLayer(this.userMarker);
                 }
             }
-            
         },
+        /**
+         * 依據 checkboxes 更新藥局標示的顏色
+         * （例如只勾選成人口罩的話，只有有成人口罩的藥局才是藍色，其餘是灰色）
+         */
         updateStoreMarkers() {
             this.map.removeLayer(this.storeMarkers);
             for (let i = 0; i < this.data.length; i++) {
                 if (this.isVisable(this.data[i].properties.mask_adult, this.data[i].properties.mask_child)) {
                     if (this.data[i].marker.options.icon.options.name === 'grey') {
-
                         // 處理 popup的內容
                         let schedule = this.data[i].properties.available.split('、');
                         let string = `<table class="schedule">
@@ -283,7 +384,6 @@ let vue = new Vue({
                     <div class="mask ${this.data[i].properties.mask_child > 0}">
                         兒童：<span>${this.data[i].properties.mask_child}</span></div>
                     `;
-
                         this.storeMarkers.removeLayer(this.data[i].marker);
                         this.data[i].marker = L.marker(
                             [this.data[i].geometry.coordinates[1], this.data[i].geometry.coordinates[0]],
@@ -293,7 +393,6 @@ let vue = new Vue({
                 }
                 else {
                     if (this.data[i].marker.options.icon.options.name === 'blue') {
-
                         // 處理 popup的內容
                         let schedule = this.data[i].properties.available.split('、');
                         let string = `<table class="schedule">
@@ -333,7 +432,6 @@ let vue = new Vue({
                     <div class="mask ${this.data[i].properties.mask_child > 0}">
                         兒童：<span>${this.data[i].properties.mask_child}</span></div>
                     `;
-
                         this.storeMarkers.removeLayer(this.data[i].marker);
                         this.data[i].marker = L.marker(
                             [this.data[i].geometry.coordinates[1], this.data[i].geometry.coordinates[0]],
@@ -345,12 +443,12 @@ let vue = new Vue({
                 this.map.removeLayer(this.userMarker);
                 this.map.addLayer(this.userMarker);
             }
-
         },
     },
     mounted() {
         this.openMap();
         this.getData();
+        // 點選搜尋框以外的地方時，搜尋選項會隱藏
         let that = this;
         document.querySelector('body').addEventListener('click', function (event) {
             if (event.target.classList.contains('search-input') !== true) {
