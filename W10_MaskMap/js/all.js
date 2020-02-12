@@ -24,6 +24,7 @@ let vue = new Vue({
         distance: 1000,
         searching: false,
         geolocation: false,
+        menuHide: false,
         icon: {
             blue: L.icon({
                 name: 'blue',
@@ -231,10 +232,14 @@ let vue = new Vue({
                 center: this.center,
                 zoom: this.zoom,
                 maxBounds: L.latLngBounds(L.latLng(27, 115), L.latLng(20, 127)),
-                minZoom: 7
+                minZoom: 7,
+                zoomControl: false
             });
             L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',
                 { attribution: 'Map data &copy; <a target="_blank" href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors, <a target="_blank" href="https://creativecommons.org/licenses/by-sa/2.0/">CC-BY-SA</a>' }).addTo(this.map);
+            L.control.zoom({
+                position: 'topright'
+            }).addTo(this.map);
             // 定位
             if (navigator.geolocation) {
                 navigator.geolocation.getCurrentPosition(
