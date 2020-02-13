@@ -62,7 +62,7 @@ label {
 .loading{
 	width: 100vw;
 	height: 100vh;
-	background-color: #7be0e5;
+	background-color: #5cc;
 	position: absolute;
 	top: 0;
 	left: 0;
@@ -124,22 +124,23 @@ label {
 }
 
 .sidebar .top .search .search-input {
-	border: none;
+	border-color: #fff;
 	outline: none;
-	width: 100%;
+	width: calc(100%);
 	height: 55px;
-	border-radius: 10px;
+	border-radius: 10px 0 0 10px;
 	padding: 10px 0 10px 10px;
 	font-size: 24px;
 	font-family: 'Noto Sans TC', sans-serif;
 	background-color: #fff;
+	border-style: solid;
+	border-width: 1px 0 0 1px;
 }
 
 .sidebar .top .search.searching .search-input {
-	border-radius: 10px 10px 0 0;
+	border-radius: 10px 0 0 0;
 	border-color: #5cc;
 	border-style: solid;
-	border-width: 1px 0 0 1px;
 }
 
 .sidebar .top .search .search-input:focus::placeholder {
@@ -151,20 +152,19 @@ label {
 	background-position: center center;
 	background-repeat: no-repeat;
 	background-color: #fff;
-	border-radius: 10px;
+	border-style: solid;
+	border-color: #fff;
+	border-width: 1px 1px 0px 0;
+	border-radius: 0 10px 10px 0;
 	height: 55px;
 	width: 55px;
 	outline: none;
-	border: none;
-	position: absolute;
-	top: 0;
-	right: 0;
 }
 
-.sidebar .top .search.searching .search-label {
+.sidebar .top .search.searching .search-label
+{
 	border-color: #5cc;
-	border-style: solid;
-	border-width: 1px 1px 0 0;
+	border-radius: 0 10px 0 0;
 }
 
 .sidebar .top .search .search-list {
@@ -319,6 +319,29 @@ label {
 	background-image: url(../img/time.png);
 }
 
+.sidebar .list .item .schedule-container
+{
+	width: 100%;
+	padding: 15px;
+	display: flex;
+	align-items: center;
+}
+
+.sidebar .list .item .schedule {
+	border: #7be0e5 solid 2px;
+	width: 100%;
+}
+
+.sidebar .list .item .schedule .th, .sidebar .list .item .schedule .td {
+	text-align: center;
+	padding: 10px 0px;
+}
+
+.sidebar .list .item .schedule .td {
+	color: #7be0e5;
+	font-weight: bold;
+}
+
 .sidebar .list .mask {
 	display: flex;
 	width: 100%;
@@ -329,7 +352,7 @@ label {
 .sidebar .list .mask .adult, .sidebar .list .mask .child {
 	width: 45%;
 	padding: 10px 20px;
-	margin: 20px 10px;
+	margin: 10px;
 	border-radius: 4px;
 	background-color: #ccc;
 	display: flex;

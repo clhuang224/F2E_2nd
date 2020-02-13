@@ -8,8 +8,8 @@ let vue = new Vue({
         /**
          * 地圖中心的緯經度
          */
-        center: [23.6334772, 120.852944],
-        zoom: 7,
+        userPosition: null,
+        zoom: null,
         data: [],
         /**
          * @model 搜尋框輸入內容
@@ -26,38 +26,6 @@ let vue = new Vue({
         searching: false,
         geolocation: false,
         menuHide: false,
-        icon: {
-            blue: L.icon({
-                name: 'blue',
-                iconUrl: `${window.location.href}/img/mark-blue.png`,
-                shadowUrl: `${window.location.href}/img/shadow.png`,
-                iconSize: [66, 90],
-                shadowSize: [58.5, 30], // size of the shadow
-                iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
-                shadowAnchor: [0, 28],  // the same for the shadow
-                popupAnchor: [0, -80] // point from which the popup should open relative to the iconAnchor
-            }),
-            grey: L.icon({
-                name: 'grey',
-                iconUrl: `${window.location.href}/img/mark-grey.png`,
-                shadowUrl: `${window.location.href}/img/shadow.png`,
-                iconSize: [66, 90],
-                shadowSize: [58.5, 30], // size of the shadow
-                iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
-                shadowAnchor: [0, 28],  // the same for the shadow
-                popupAnchor: [0, -80] // point from which the popup should open relative to the iconAnchor
-            }),
-            red: L.icon({
-                name: 'red',
-                iconUrl: `${window.location.href}/img/mark-red.png`,
-                shadowUrl: `${window.location.href}/img/shadow.png`,
-                iconSize: [66, 90],
-                shadowSize: [58.5, 30], // size of the shadow
-                iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
-                shadowAnchor: [0, 28],  // the same for the shadow
-                popupAnchor: [0, -80] // point from which the popup should open relative to the iconAnchor
-            }),
-        },
     },
     filters: {
         /**
@@ -81,7 +49,7 @@ let vue = new Vue({
                 let result = this.data.slice();
                 let resultLength = result.length;
                 for (let i = 0; i < resultLength; i++) {
-                    result[i].distance = this.computeDistance(this.center, result[i].geometry.coordinates);
+                    result[i].distance = this.computeDistance(this.userPosition, result[i].geometry.coordinates);
                 }
                 result.sort(function (a, b) {
                     return a.distance - b.distance;
@@ -118,6 +86,22 @@ let vue = new Vue({
     },
     methods: {
         /**
+         * 取得不同類型的 icon
+         * @param {String} type icon 類型： red/ blue/ blue-grey / grey-blue / grey
+         */
+        getIcon: function (type) {
+            return L.icon({
+                type: type,
+                iconUrl: `${window.location.origin + window.location.pathname}img/mark-${type}.png`,
+                shadowUrl: `${window.location.origin + window.location.pathname}img/mark-shadow.png`,
+                iconSize: [66, 90],
+                shadowSize: [58.5, 30], // size of the shadow
+                iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
+                shadowAnchor: [0, 28],  // the same for the shadow
+                popupAnchor: [0, -80] // point from which the popup should open relative to the iconAnchor
+            });
+        },
+        /**
          * 計算 a, b 兩點的距離
          * @param {Number[]} a a 點的緯經度
          * @param {Number[]} b b 點的緯經度
@@ -133,7 +117,9 @@ let vue = new Vue({
         },
         /**
          * 1. 取得口罩地圖的資料
-         * 2. 將藥局的位置標示在地圖中，並將標示的物件存在 data 陣列裡
+         * 2. 產生營業時間表格字串
+         * 3. 呼叫 addMarkers()
+         * 4. loading = false
          * @param {Number} a a 點的緯經度
          * @param {Number} b b 點的緯經度
          * @returns {Number} a 、 b 兩點的距離（公尺）
@@ -144,90 +130,69 @@ let vue = new Vue({
             xhr.open('get', 'https://raw.githubusercontent.com/kiang/pharmacies/master/json/points.json');
             xhr.onload = function () {
                 that.data = JSON.parse(xhr.responseText).features;
-                that.storeMarkers = new L.markerClusterGroup().addTo(that.map);
                 for (let i = 0; i < that.data.length; i++) {
-                    // 處理 popup的內容
-                    let schedule = that.data[i].properties.available.split('、');
-                    let string = `<table class="schedule">
-                    <tr>
-                        <th class="th"></th><th class="th">一</th><th class="th">二</th><th class="th">三</th><th class="th">四</th><th class="th">五</th><th class="th">六</th><th class="th">日</th>
-                    </tr>`;
-                    for (let j = 0; j < schedule.length; j++) {
-                        switch (j) {
-                            case 0:
-                                string += `<tr><th class="th">早上</th>`;
-                                break;
-                            case 7:
-                                string += `<tr><th class="th">下午</th>`;
-                                break;
-                            case 14:
-                                string += `<tr><th class="th">晚上</th>`;
-                                break;
-                        }
-                        if (schedule[j].indexOf('看診') >= 0) {
-                            string += `<td class="td">◯</td>`;
-                        }
-                        else {
-                            string += `<td class="td"></td>`;
-                        }
-                        if (j % 7 === 6) {
-                            string += `</tr>`;
-                        }
-                    }
-                    string += `</table>`;
-                    let popupString = `
-                    <h2 class="title">${that.data[i].properties.name}</h2>
-                    <div class="address">${that.data[i].properties.address}</div>
-                    <div class="phone"><a :href="tel:${that.data[i].properties.phone}">${that.data[i].properties.phone}</a></div>
-                    ${string}
-                    <div class="mask ${that.data[i].properties.mask_adult > 0}">
-                        成人：<span>${that.data[i].properties.mask_adult}</span></div>
-                    <div class="mask ${that.data[i].properties.mask_child > 0}">
-                        兒童：<span>${that.data[i].properties.mask_child}</span></div>
-                    `;
-                    // 放入 marker
-                    if (that.data[i].properties.mask_adult > 0 || that.data[i].properties.mask_child > 0) {
-                        // 把 marker 的實體記在 data 裡
-                        that.data[i].marker = L.marker(
-                            [that.data[i].geometry.coordinates[1], that.data[i].geometry.coordinates[0]],
-                            { icon: that.icon.blue }).bindPopup(popupString);
-                        // 監聽 marker 雙擊
-                        that.data[i].marker.on('dblclick', function (event) {
-                            that.changePosition(
-                                that.data[i].geometry.coordinates[1],
-                                that.data[i].geometry.coordinates[0],
-                                that.data[i]);
-                        });
-
-                        that.storeMarkers.addLayer(that.data[i].marker);
-                    }
-                    else {
-                        // 把 marker 的實體記在 data 裡
-                        that.data[i].marker = L.marker(
-                            [that.data[i].geometry.coordinates[1], that.data[i].geometry.coordinates[0]],
-                            { icon: that.icon.grey }).bindPopup(popupString);
-                        // 監聽 marker 雙擊
-                        that.data[i].marker.on('dblclick', () => {
-                            if (window.innerWidth > 480)
-                                that.changePosition(
-                                    that.data[i].geometry.coordinates[1],
-                                    that.data[i].geometry.coordinates[0],
-                                    that.data[i]);
-                        });
-                        that.data[i].marker.on('click', () => {
-                            if (window.innerWidth <= 480)
-                                that.changePosition(
-                                    that.data[i].geometry.coordinates[1],
-                                    that.data[i].geometry.coordinates[0],
-                                    that.data[i]);
-                        });
-                        that.storeMarkers.addLayer(that.data[i].marker);
-                    }
+                    that.data[i].properties.schedule = that.createScheduleString(that.data[i]);
                 }
-                that.map.addLayer(that.storeMarkers);
+                that.addMarkers();
                 that.loading = false;
             };
             xhr.send();
+        },
+        /**
+         * 將 data 裡的藥局資料，標記在地圖上
+         */
+        addMarkers: function () {
+            // 宣告 marker cluster
+            this.storeMarkers = new L.markerClusterGroup().addTo(this.map);
+            for (let i = 0; i < this.data.length; i++) {
+                // 處理 popup 字串
+                let popupString = this.createPopup(this.data[i]);
+                // 產生 marker
+                if (this.data[i].properties.mask_adult > 0) {
+                    if (this.data[i].properties.mask_child > 0) {
+                        this.data[i].marker = L.marker(
+                            [this.data[i].geometry.coordinates[1], this.data[i].geometry.coordinates[0]],
+                            { icon: this.getIcon('blue') }).bindPopup(popupString);
+                    }
+                    else {
+                        this.data[i].marker = L.marker(
+                            [this.data[i].geometry.coordinates[1], this.data[i].geometry.coordinates[0]],
+                            { icon: this.getIcon('blue-grey') }).bindPopup(popupString);
+                    }
+                }
+                else {
+                    if (this.data[i].properties.mask_child > 0) {
+                        this.data[i].marker = L.marker(
+                            [this.data[i].geometry.coordinates[1], this.data[i].geometry.coordinates[0]],
+                            { icon: this.getIcon('grey-blue') }).bindPopup(popupString);
+                    }
+                    else {
+                        this.data[i].marker = L.marker(
+                            [this.data[i].geometry.coordinates[1], this.data[i].geometry.coordinates[0]],
+                            { icon: this.getIcon('grey') }).bindPopup(popupString);
+                    }
+                }
+                // 監聽 marker 點擊事件
+                let that = this;
+                this.data[i].marker.on('dblclick', () => {
+                    if (window.innerWidth > 480)
+                        that.changePosition(
+                            that.data[i].geometry.coordinates[1],
+                            that.data[i].geometry.coordinates[0],
+                            that.data[i]);
+                });
+                this.data[i].marker.on('click', () => {
+                    if (window.innerWidth <= 480)
+                        that.changePosition(
+                            that.data[i].geometry.coordinates[1],
+                            that.data[i].geometry.coordinates[0],
+                            that.data[i]);
+                });
+                // 放入 marker cluster
+                this.storeMarkers.addLayer(this.data[i].marker);
+            }
+            // 放入 map
+            this.map.addLayer(this.storeMarkers);
         },
         /**
          * 1. 宣告 Leaflet 的實體
@@ -239,8 +204,8 @@ let vue = new Vue({
             let that = this;
             // 設定地圖
             this.map = L.map('map', {
-                center: this.center,
-                zoom: this.zoom,
+                center: [23.6334772, 120.852944],
+                zoom: 7,
                 maxBounds: L.latLngBounds(L.latLng(27, 115), L.latLng(20, 127)),
                 minZoom: 7,
                 zoomControl: false
@@ -256,10 +221,10 @@ let vue = new Vue({
                     // 有使用者位置資訊就以定位為中心
                     function (position) {
                         that.geolocation = true;
-                        that.center = [position.coords.latitude, position.coords.longitude];
+                        that.userPosition = [position.coords.latitude, position.coords.longitude];
                         that.zoom = 19;
-                        that.map.setView(new L.LatLng(that.center[0], that.center[1]), that.zoom);
-                        that.userMarker = L.marker([that.center[0], that.center[1]], { icon: that.icon.red });
+                        that.map.setView(new L.LatLng(that.userPosition[0], that.userPosition[1]), that.zoom);
+                        that.userMarker = L.marker([that.userPosition[0], that.userPosition[1]], { icon: that.getIcon('red') });
                         that.map.addLayer(that.userMarker);
                     }
                 );
@@ -296,23 +261,74 @@ let vue = new Vue({
             }
         },
         /**
-         * 將地圖中心移到某個緯經度
-         * @param {Number} la 緯度
-         * @param {Number} lon 經度
+         * 依據藥局資料產生營業時間表格字串
+         * @param {Object} item 藥局資料
+         * @returns {String} 營業時間表格字串
+         */
+        createScheduleString(item) {
+            let schedule = item.properties.available.split('、');
+            let string = `<table class="schedule">
+                                <tr>
+                                    <th class="th"></th><th class="th">一</th><th class="th">二</th><th class="th">三</th><th class="th">四</th><th class="th">五</th><th class="th">六</th><th class="th">日</th>
+                                </tr>`;
+            for (let j = 0; j < schedule.length; j++) {
+                switch (j) {
+                    case 0:
+                        string += `<tr><th class="th">早上</th>`;
+                        break;
+                    case 7:
+                        string += `<tr><th class="th">下午</th>`;
+                        break;
+                    case 14:
+                        string += `<tr><th class="th">晚上</th>`;
+                        break;
+                }
+                if (schedule[j].indexOf('看診') >= 0) {
+                    string += `<td class="td">◯</td>`;
+                }
+                else {
+                    string += `<td class="td"></td>`;
+                }
+                if (j % 7 === 6) {
+                    string += `</tr>`;
+                }
+            }
+            string += `</table>`;
+            return string;
+        },
+        /**
+         * 依據藥局資料產生 popup 字串
+         * @param {Object} item 藥局資料
+         * @returns {String} popup 字串
+         */
+        createPopup(item) {
+            return `<h2 class="title">${item.properties.name}</h2>
+                <div class="address">${item.properties.address}</div>
+                <div class="phone"><a :href="tel:${item.properties.phone}">${item.properties.phone}</a></div>
+                ${item.properties.schedule}
+                <div class="mask ${item.properties.mask_adult > 0}">
+                    成人：<span>${item.properties.mask_adult}</span></div>
+                <div class="mask ${item.properties.mask_child > 0}">
+                    兒童：<span>${item.properties.mask_child}</span></div>`;
+        },
+        /**
+         * 將使用者移到某個緯經度
+         * @param {Number} lat 緯度
+         * @param {Number} lng 經度
          * @param {Object} item 如果該點是藥局，參數要加上藥局資料的物件
          */
-        changePosition(la, lon, item) {
+        changePosition(lat, lng, item) {
             // 移動到緯經度
             if (!item) {
-                this.center = [la, lon];
+                this.userPosition = [lat, lng];
                 this.zoom = 19;
-                this.map.setView(new L.LatLng(this.center[0], this.center[1]), this.zoom);
+                this.map.setView(new L.LatLng(this.userPosition[0], this.userPosition[1]));
                 if (this.userMarker !== null) {
                     this.map.removeLayer(this.userMarker);
                 }
-                this.userMarker = L.marker([this.center[0], this.center[1]], { icon: this.icon.red });
+                this.userMarker = L.marker([this.userPosition[0], this.userPosition[1]], { icon: this.getIcon('red') });
                 this.map.addLayer(this.userMarker);
-                this.searchInput = this.center;
+                this.searchInput = this.userPosition;
             }
             // 移動到定位位置或藥局
             else {
@@ -322,13 +338,13 @@ let vue = new Vue({
                         navigator.geolocation.getCurrentPosition(
                             // 有使用者定位
                             function (position) {
-                                that.center = [position.coords.latitude, position.coords.longitude];
+                                that.userPosition = [position.coords.latitude, position.coords.longitude];
                                 that.zoom = 19;
-                                that.map.setView(new L.LatLng(that.center[0], that.center[1]), that.zoom);
+                                that.map.setView(new L.LatLng(that.userPosition[0], that.userPosition[1]), that.zoom);
                                 that.searchInput = item.properties.name;
                                 if (that.userMarker !== null) {
                                     that.map.removeLayer(that.userMarker);
-                                    that.userMarker = L.marker([that.center[0], that.center[1]], { icon: that.icon.red });
+                                    that.userMarker = L.marker([that.userPosition[0], that.userPosition[1]], { icon: that.getIcon('red') });
                                     that.map.addLayer(that.userMarker);
                                 }
                             },
@@ -342,125 +358,42 @@ let vue = new Vue({
                     }
                 }
                 else {
-                    this.center = [item.geometry.coordinates[1], item.geometry.coordinates[0]];
+                    this.userPosition = [item.geometry.coordinates[1], item.geometry.coordinates[0]];
                     this.zoom = 19;
-                    this.map.setView(new L.LatLng(this.center[0], this.center[1]), this.zoom);
+                    this.map.setView(new L.LatLng(this.userPosition[0], this.userPosition[1]), this.zoom);
                     this.searchInput = item.properties.name;
                     if (this.userMarker !== null) {
                         this.map.removeLayer(this.userMarker);
                     }
-                    this.userMarker = L.marker([this.center[0], this.center[1]], { icon: this.icon.red }).bindPopup(item.marker._popup._content);
+                    this.userMarker = L.marker([this.userPosition[0], this.userPosition[1]], { icon: this.getIcon('red') }).bindPopup(item.marker._popup._content);
                     this.map.addLayer(this.userMarker);
                 }
             }
         },
         /**
-         * 依據 checkboxes 更新藥局標示的顏色
-         * （例如只勾選成人口罩的話，只有有成人口罩的藥局才是藍色，其餘是灰色）
+         * 中心移到藥局並開啟 popup
+         * @param {Object} item 藥局資料
          */
-        updateStoreMarkers() {
-            this.map.removeLayer(this.storeMarkers);
-            for (let i = 0; i < this.data.length; i++) {
-                if (this.isVisable(this.data[i].properties.mask_adult, this.data[i].properties.mask_child)) {
-                    if (this.data[i].marker.options.icon.options.name === 'grey') {
-                        // 處理 popup的內容
-                        let schedule = this.data[i].properties.available.split('、');
-                        let string = `<table class="schedule">
-                    <tr>
-                        <th class="th"></th><th class="th">一</th><th class="th">二</th><th class="th">三</th><th class="th">四</th><th class="th">五</th><th class="th">六</th><th class="th">日</th>
-                    </tr>`;
-                        for (let j = 0; j < schedule.length; j++) {
-                            switch (j) {
-                                case 0:
-                                    string += `<tr><th class="th">早上</th>`;
-                                    break;
-                                case 7:
-                                    string += `<tr><th class="th">下午</th>`;
-                                    break;
-                                case 14:
-                                    string += `<tr><th class="th">晚上</th>`;
-                                    break;
-                            }
-                            if (schedule[j].indexOf('看診') >= 0) {
-                                string += `<td class="td">◯</td>`;
-                            }
-                            else {
-                                string += `<td class="td"></td>`;
-                            }
-                            if (j % 7 === 6) {
-                                string += `</tr>`;
-                            }
-                        }
-                        string += `</table>`;
-                        let popupString = `
-                    <h2 class="title">${this.data[i].properties.name}</h2>
-                    <div class="address">${this.data[i].properties.address}</div>
-                    <div class="phone"><a :href="tel:${this.data[i].properties.phone}">${this.data[i].properties.phone}</a></div>
-                    ${string}
-                    <div class="mask ${this.data[i].properties.mask_adult > 0}">
-                        成人：<span>${this.data[i].properties.mask_adult}</span></div>
-                    <div class="mask ${this.data[i].properties.mask_child > 0}">
-                        兒童：<span>${this.data[i].properties.mask_child}</span></div>
-                    `;
-                        this.storeMarkers.removeLayer(this.data[i].marker);
-                        this.data[i].marker = L.marker(
-                            [this.data[i].geometry.coordinates[1], this.data[i].geometry.coordinates[0]],
-                            { icon: this.icon.blue }).bindPopup(popupString);
-                        this.storeMarkers.addLayer(this.data[i].marker);
-                    }
-                }
-                else {
-                    if (this.data[i].marker.options.icon.options.name === 'blue') {
-                        // 處理 popup的內容
-                        let schedule = this.data[i].properties.available.split('、');
-                        let string = `<table class="schedule">
-                    <tr>
-                        <th class="th"></th><th class="th">一</th><th class="th">二</th><th class="th">三</th><th class="th">四</th><th class="th">五</th><th class="th">六</th><th class="th">日</th>
-                    </tr>`;
-                        for (let j = 0; j < schedule.length; j++) {
-                            switch (j) {
-                                case 0:
-                                    string += `<tr><th class="th">早上</th>`;
-                                    break;
-                                case 7:
-                                    string += `<tr><th class="th">下午</th>`;
-                                    break;
-                                case 14:
-                                    string += `<tr><th class="th">晚上</th>`;
-                                    break;
-                            }
-                            if (schedule[j].indexOf('看診') >= 0) {
-                                string += `<td class="td">◯</td>`;
-                            }
-                            else {
-                                string += `<td class="td"></td>`;
-                            }
-                            if (j % 7 === 6) {
-                                string += `</tr>`;
-                            }
-                        }
-                        string += `</table>`;
-                        let popupString = `
-                    <h2 class="title">${this.data[i].properties.name}</h2>
-                    <div class="address">${this.data[i].properties.address}</div>
-                    <div class="phone"><a :href="tel:${this.data[i].properties.phone}">${this.data[i].properties.phone}</a></div>
-                    ${string}
-                    <div class="mask ${this.data[i].properties.mask_adult > 0}">
-                        成人：<span>${this.data[i].properties.mask_adult}</span></div>
-                    <div class="mask ${this.data[i].properties.mask_child > 0}">
-                        兒童：<span>${this.data[i].properties.mask_child}</span></div>
-                    `;
-                        this.storeMarkers.removeLayer(this.data[i].marker);
-                        this.data[i].marker = L.marker(
-                            [this.data[i].geometry.coordinates[1], this.data[i].geometry.coordinates[0]],
-                            { icon: this.icon.grey }).bindPopup(popupString);
-                        this.storeMarkers.addLayer(this.data[i].marker);
-                    }
-                }
-                this.map.addLayer(this.storeMarkers);
-                this.map.removeLayer(this.userMarker);
-                this.map.addLayer(this.userMarker);
+        focusStore(item) {
+            let that = this;
+            this.map.setView([item.geometry.coordinates[1], item.geometry.coordinates[0]]);
+            let marker;
+            if (item.distance === 0) {
+                marker = L.marker(
+                    [item.geometry.coordinates[1], item.geometry.coordinates[0]],
+                    { icon: this.getIcon('red') }).bindPopup(this.createPopup(item));
+                marker.addTo(this.map).openPopup();
             }
+            else {
+                marker = L.marker(
+                    [item.geometry.coordinates[1], item.geometry.coordinates[0]],
+                    { icon: this.getIcon(item.marker.options.icon.options.type) }).bindPopup(this.createPopup(item));
+
+            }
+            marker.addTo(this.map).openPopup();
+            marker.on('popupclose', function removeMarker() {
+                that.map.removeLayer(marker);
+            });
         },
     },
     mounted() {

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>口罩存量查詢</title>
+    <title>口罩存量查詢 | Lynn</title>
     <link rel="shortcut icon" href="favicon.ico" type="image/x-icon">
     <!-- font -->
     <link href="https://fonts.googleapis.com/css?family=Noto+Sans+TC&display=swap" rel="stylesheet">
@@ -44,12 +44,10 @@
                 <div class="filter">
                     <ul class="checkboxes">
                         <input type="checkbox" name="mask" id="adult" class="checkbox"
-                            :class="{active: checkboxes[0] === true}" v-model="checkboxes[0]"
-                            @change="updateStoreMarkers()">
+                            :class="{active: checkboxes[0] === true}" v-model="checkboxes[0]">
                         <label for="adult">成人口罩</label>
                         <input type="checkbox" name="mask" id="child" class="checkbox"
-                            :class="{active: checkboxes[1] === true}" v-model="checkboxes[1]"
-                            @change="updateStoreMarkers()">
+                            :class="{active: checkboxes[1] === true}" v-model="checkboxes[1]">
                         <label for="child">兒童口罩</label>
                     </ul>
                     <select name="distance" class="distance" v-model="distance" v-if="userMarker !== null">
@@ -58,17 +56,17 @@
                         <option class="option" value="10000">10公里</option>
                     </select>
                 </div>
-
             </div>
             <ul class="list">
                 <li class="item" v-for="(item,index,key) of sortedData" :key="key"
                     v-if="(item.distance < distance || (userMarker === null && index < 10)) && isVisable(item.properties.mask_adult,item.properties.mask_child) "
                     @dblclick="changePosition(item.geometry.coordinates[1],item.geometry.coordinates[0],item)"
-                    :data-id="item.properties.id">
+                    @click="focusStore(item)">
                     <h2 class="title">{{item.properties.name}}</h2>
                     <div class="distance" v-if="userMarker !== null">{{item.distance | round}} 公尺</div>
                     <div class="data address">{{item.properties.address}}</div>
-                    <div class="data phone"><a :href="'tel:'+item.properties.phone">{{item.properties.phone}}</a></div>
+                    <div class="data phone"><a :href="'tel:'+item.properties.phone">{{item.properties.phone}}</a>
+                    </div>
                     <div class="mask">
                         <div class="adult" :class="{stock: item.properties.mask_adult > 0}">
                             成人口罩：<span>{{item.properties.mask_adult}}</span></div>
