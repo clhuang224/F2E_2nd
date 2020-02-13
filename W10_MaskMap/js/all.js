@@ -181,13 +181,6 @@ let vue = new Vue({
                             that.data[i].geometry.coordinates[0],
                             that.data[i]);
                 });
-                this.data[i].marker.on('click', () => {
-                    if (window.innerWidth <= 480)
-                        that.changePosition(
-                            that.data[i].geometry.coordinates[1],
-                            that.data[i].geometry.coordinates[0],
-                            that.data[i]);
-                });
                 // 放入 marker cluster
                 this.storeMarkers.addLayer(this.data[i].marker);
             }
