@@ -38,8 +38,8 @@ let vue = new Vue({
             }),
             grey: L.icon({
                 name: 'grey',
-                iconUrl: `${window.location.href}/img/mark-blue.png`,
-                shadowUrl: `${window.location.href}/img/mark-blue.png`,
+                iconUrl: `${window.location.href}/img/mark-grey.png`,
+                shadowUrl: `${window.location.href}/img/shadow.png`,
                 iconSize: [66, 90],
                 shadowSize: [58.5, 30], // size of the shadow
                 iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
@@ -48,8 +48,8 @@ let vue = new Vue({
             }),
             red: L.icon({
                 name: 'red',
-                iconUrl: `${window.location.href}/img/mark-blue.png`,
-                shadowUrl: `${window.location.href}/img/mark-blue.png`,
+                iconUrl: `${window.location.href}/img/mark-red.png`,
+                shadowUrl: `${window.location.href}/img/shadow.png`,
                 iconSize: [66, 90],
                 shadowSize: [58.5, 30], // size of the shadow
                 iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
