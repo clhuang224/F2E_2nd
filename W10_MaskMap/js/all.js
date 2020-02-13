@@ -28,8 +28,8 @@ let vue = new Vue({
         icon: {
             blue: L.icon({
                 name: 'blue',
-                iconUrl: '../img/mark-blue.png',
-                shadowUrl: '../img/shadow.png',
+                iconUrl: `${window.location.href}/img/mark-blue.png`,
+                shadowUrl: `${window.location.href}/img/mark-blue.png`,
                 iconSize: [66, 90],
                 shadowSize: [58.5, 30], // size of the shadow
                 iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
@@ -38,8 +38,8 @@ let vue = new Vue({
             }),
             grey: L.icon({
                 name: 'grey',
-                iconUrl: '../img/mark-grey.png',
-                shadowUrl: '../img/shadow.png',
+                iconUrl: `${window.location.href}/img/mark-blue.png`,
+                shadowUrl: `${window.location.href}/img/mark-blue.png`,
                 iconSize: [66, 90],
                 shadowSize: [58.5, 30], // size of the shadow
                 iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
@@ -48,8 +48,8 @@ let vue = new Vue({
             }),
             red: L.icon({
                 name: 'red',
-                iconUrl: '../img/mark-red.png',
-                shadowUrl: '../img/shadow.png',
+                iconUrl: `${window.location.href}/img/mark-blue.png`,
+                shadowUrl: `${window.location.href}/img/mark-blue.png`,
                 iconSize: [66, 90],
                 shadowSize: [58.5, 30], // size of the shadow
                 iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
@@ -256,6 +256,14 @@ let vue = new Vue({
             }
             // 雙擊地圖中心會改變
             document.getElementById('map').addEventListener('dblclick', function (event) {
+                if (!event.target.classList.contains('leaflet-marker-icon')) {
+                    console.log(event);
+                    let latlng = that.map.mouseEventToLatLng(event);
+                    that.changePosition(latlng.lat, latlng.lng);
+                }
+            });
+            document.getElementById('map').addEventListener('touchstart', function (event) {
+                console.log(event);
                 if (!event.target.classList.contains('leaflet-marker-icon')) {
                     let latlng = that.map.mouseEventToLatLng(event);
                     that.changePosition(latlng.lat, latlng.lng);
