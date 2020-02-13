@@ -57,6 +57,27 @@ label {
 	position: relative;
 }
 
+/* loading */
+
+.loading{
+	width: 100vw;
+	height: 100vh;
+	background-color: #7be0e5;
+	position: absolute;
+	top: 0;
+	left: 0;
+	z-index: 5;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	color: #fff;
+	font-size: 24px;
+}
+
+.loading .pacman{
+	margin-right: 35px;
+}
+
 /* sidebar */
 
 .sidebar {

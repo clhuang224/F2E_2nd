@@ -13,11 +13,17 @@
         integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
         crossorigin="" />
     <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster@1.4.1/dist/MarkerCluster.css">
+    <link rel="stylesheet" href="css/loaders.min.css">
     <link rel="stylesheet" href="css/all.css">
 </head>
 
 <body>
     <div id="vue" class="wrap">
+        <div class="loading" v-if="loading === true">
+
+            <div class="loader-inner pacman"></div>
+            <div>資料讀取中</div>
+        </div>
         <div class="sidebar" :class="{hide: menuHide === true}">
             <button class="toggle-button" @click="menuHide = !menuHide"></button>
             <div class="top">
@@ -28,7 +34,8 @@
                     <label class="search-label" for="search-input"></label>
                     <ul class="search-list" v-if="searching === true">
                         <li class="search-item" v-for="(item, index, key) of searchingList" :key="key"
-                            @click="changePosition(item.geometry.coordinates[1],item.geometry.coordinates[0],item)" v-if="index < 10">
+                            @click="changePosition(item.geometry.coordinates[1],item.geometry.coordinates[0],item)"
+                            v-if="index < 10">
                             <div class="name">{{item.properties.name}}</div>
                             <div class="address">{{item.properties.address}}</div>
                         </li>
@@ -56,7 +63,8 @@
             <ul class="list">
                 <li class="item" v-for="(item,index,key) of sortedData" :key="key"
                     v-if="(item.distance < distance || (userMarker === null && index < 10)) && isVisable(item.properties.mask_adult,item.properties.mask_child) "
-                    @dblclick="changePosition(item.geometry.coordinates[1],item.geometry.coordinates[0],item)" :data-id="item.properties.id">
+                    @dblclick="changePosition(item.geometry.coordinates[1],item.geometry.coordinates[0],item)"
+                    :data-id="item.properties.id">
                     <h2 class="title">{{item.properties.name}}</h2>
                     <div class="distance" v-if="userMarker !== null">{{item.distance | round}} 公尺</div>
                     <div class="data address">{{item.properties.address}}</div>
@@ -75,10 +83,13 @@
 
     <!-- js -->
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"
+        integrity="sha256-CSXorXvZcTkaix6Yvo6HppcZGetbYMGWSFlBw8HfCJo=" crossorigin="anonymous"></script>
     <script src="https://unpkg.com/leaflet@1.6.0/dist/leaflet.js"
         integrity="sha512-gZwIG9x3wUXg2hdXF6+rVkLF/0Vi9U8D2Ntg4Ga5I5BZpVkVxlJWbSQtXPSiUTtC0TjtGOmxa1AJPuV0CPthew=="
         crossorigin=""></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet.markercluster/1.4.1/leaflet.markercluster.js"></script>
+    <script src="js/loaders.css.js"></script>
     <script src="js/all.js"></script>
 </body>
 

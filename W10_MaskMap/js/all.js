@@ -1,6 +1,7 @@
 let vue = new Vue({
     el: '#vue',
     data: {
+        loading: true,
         map: null,
         userMarker: null,
         stroeMarkers: null,
@@ -29,7 +30,7 @@ let vue = new Vue({
             blue: L.icon({
                 name: 'blue',
                 iconUrl: `${window.location.href}/img/mark-blue.png`,
-                shadowUrl: `${window.location.href}/img/mark-blue.png`,
+                shadowUrl: `${window.location.href}/img/shadow.png`,
                 iconSize: [66, 90],
                 shadowSize: [58.5, 30], // size of the shadow
                 iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
@@ -206,16 +207,25 @@ let vue = new Vue({
                             [that.data[i].geometry.coordinates[1], that.data[i].geometry.coordinates[0]],
                             { icon: that.icon.grey }).bindPopup(popupString);
                         // 監聽 marker 雙擊
-                        that.data[i].marker.on('dblclick', function (event) {
-                            that.changePosition(
-                                that.data[i].geometry.coordinates[1],
-                                that.data[i].geometry.coordinates[0],
-                                that.data[i]);
+                        that.data[i].marker.on('dblclick', () => {
+                            if (window.innerWidth > 480)
+                                that.changePosition(
+                                    that.data[i].geometry.coordinates[1],
+                                    that.data[i].geometry.coordinates[0],
+                                    that.data[i]);
+                        });
+                        that.data[i].marker.on('click', () => {
+                            if (window.innerWidth <= 480)
+                                that.changePosition(
+                                    that.data[i].geometry.coordinates[1],
+                                    that.data[i].geometry.coordinates[0],
+                                    that.data[i]);
                         });
                         that.storeMarkers.addLayer(that.data[i].marker);
                     }
                 }
                 that.map.addLayer(that.storeMarkers);
+                that.loading = false;
             };
             xhr.send();
         },
@@ -254,21 +264,16 @@ let vue = new Vue({
                     }
                 );
             }
-            // 雙擊地圖中心會改變
-            document.getElementById('map').addEventListener('dblclick', function (event) {
-                if (!event.target.classList.contains('leaflet-marker-icon')) {
-                    console.log(event);
-                    let latlng = that.map.mouseEventToLatLng(event);
-                    that.changePosition(latlng.lat, latlng.lng);
+            // 電腦使用雙擊移動使用者位置
+            that.map.on('dblclick', (event) => {
+                that.changePosition(event.latlng.lat, event.latlng.lng);
+            })
+            // 手機使用單擊移動使用者位置
+            that.map.on('click', (event) => {
+                if (window.innerWidth <= 480) {
+                    that.changePosition(event.latlng.lat, event.latlng.lng);
                 }
-            });
-            document.getElementById('map').addEventListener('touchstart', function (event) {
-                console.log(event);
-                if (!event.target.classList.contains('leaflet-marker-icon')) {
-                    let latlng = that.map.mouseEventToLatLng(event);
-                    that.changePosition(latlng.lat, latlng.lng);
-                }
-            });
+            })
         },
         /**
          * 依據 checkbox 打勾的狀況，回傳以這個口罩數是否要顯示該筆資料
