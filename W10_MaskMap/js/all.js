@@ -25,7 +25,7 @@ let vue = new Vue({
         distance: 1000,
         searching: false,
         geolocation: false,
-        menuHide: false,
+        menuHide: true,
         noticeOpen: true,
     },
     filters: {
