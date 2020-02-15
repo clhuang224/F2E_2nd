@@ -23,9 +23,9 @@
             <div class="loader-inner pacman"></div>
             <div>資料讀取中</div>
         </div>
-        <aside class="notice">
+        <aside class="notice" v-if="noticeOpen === true">
             <div class="box">
-                <button class="close-button">×</button>
+                <button class="close-button" @click="noticeOpen = false">×</button>
                 <ul class="list">
                     <div class="title">使用須知</div>
                     <li class="item">部分藥局因採發放號碼牌方式，方便民眾購買口罩，<strong>系統目前無法顯示已發送號碼牌數量</strong>。</li>

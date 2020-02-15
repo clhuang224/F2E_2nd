@@ -26,6 +26,7 @@ let vue = new Vue({
         searching: false,
         geolocation: false,
         menuHide: false,
+        noticeOpen: true,
     },
     filters: {
         /**
