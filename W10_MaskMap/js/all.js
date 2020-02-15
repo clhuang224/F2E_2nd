@@ -92,8 +92,8 @@ let vue = new Vue({
         getIcon: function (type) {
             return L.icon({
                 type: type,
-                iconUrl: `${window.location.origin + window.location.pathname}img/mark-${type}.png`,
-                shadowUrl: `${window.location.origin + window.location.pathname}img/mark-shadow.png`,
+                iconUrl: `https://clhuang224.github.io/F2E_2nd/W10_MaskMap/img/mark-${type}.png`,
+                shadowUrl: `https://clhuang224.github.io/F2E_2nd/W10_MaskMap/img/mark-shadow.png`,
                 iconSize: [66, 90],
                 shadowSize: [58.5, 30], // size of the shadow
                 iconAnchor: [33, 90], // point of the icon which will correspond to marker's location
@@ -132,6 +132,7 @@ let vue = new Vue({
                 that.data = JSON.parse(xhr.responseText).features;
                 for (let i = 0; i < that.data.length; i++) {
                     that.data[i].properties.schedule = that.createScheduleString(that.data[i]);
+                    that.data[i].focus = false;
                 }
                 that.addMarkers();
                 that.loading = false;
@@ -295,14 +296,20 @@ let vue = new Vue({
          * @returns {String} popup 字串
          */
         createPopup(item) {
-            return `<h2 class="title">${item.properties.name}</h2>
-                <div class="address">${item.properties.address}</div>
-                <div class="phone"><a :href="tel:${item.properties.phone}">${item.properties.phone}</a></div>
-                ${item.properties.schedule}
-                <div class="mask ${item.properties.mask_adult > 0}">
-                    成人：<span>${item.properties.mask_adult}</span></div>
-                <div class="mask ${item.properties.mask_child > 0}">
-                    兒童：<span>${item.properties.mask_child}</span></div>`;
+            let result = `<h2 class="title">${item.properties.name}</h2>
+                <div class="mask">
+                    <div class="child ${item.properties.mask_adult > 0}">
+                        成人口罩：${item.properties.mask_adult}</div>
+                    <div class="adult ${item.properties.mask_child > 0}">
+                        兒童口罩：${item.properties.mask_child}</div>
+                </div>
+                <div class="data address">${item.properties.address}</div>
+                <div class="data phone"><a href="tel:${item.properties.phone}">${item.properties.phone}</a></div>
+                <div class="schedule-container">${item.properties.schedule}</div>`;
+            if (item.properties.note !== '-') {
+                result += `<div class="data note">${item.properties.note}</div>`;
+            }
+            return result;
         },
         /**
          * 將使用者移到某個緯經度
@@ -387,6 +394,7 @@ let vue = new Vue({
             marker.on('popupclose', function removeMarker() {
                 that.map.removeLayer(marker);
             });
+            item.focus = true;
         },
     },
     mounted() {

@@ -9,6 +9,7 @@ html, body, div, span, applet, object, iframe, h1, h2, h3, h4, h5, h6, p, blockq
 	border: 0;
 	font-size: 100%;
 	vertical-align: baseline;
+	font-family: 'Noto Sans TC', sans-serif;
 }
 
 /* HTML5 display-role reset for older browsers */
@@ -59,7 +60,7 @@ label {
 
 /* loading */
 
-.loading{
+.loading {
 	width: 100vw;
 	height: 100vh;
 	background-color: #5cc;
@@ -74,8 +75,85 @@ label {
 	font-size: 24px;
 }
 
-.loading .pacman{
+.loading .pacman {
 	margin-right: 35px;
+}
+
+/* notice */
+
+.notice {
+	position: fixed;
+	height: 100vh;
+	width: 100%;
+	left: 0;
+	top: 0;
+	background-color: rgba(0, 0, 0, 0.5);
+	z-index: 3;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+}
+
+.notice .box {
+	width: 90%;
+	max-width: 800px;
+	padding: 30px;
+	background-color: rgba(255, 255, 255, 0.8);
+	border-radius: 10px;
+	position: relative;
+	font-size: 22px;
+	text-align: justify;
+}
+
+.notice .close-button{
+	border: none;
+	background-color: transparent;
+	color: #5cc;
+	font-weight: bold;
+	font-size: 36px;
+	width: 40px;
+	height: 40px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	cursor: pointer;
+	position: absolute;
+	right: 0;
+	top: 0;
+	padding: 5px;
+	outline: none;
+}
+
+.notice .list .title{
+	font-weight: bold;
+	padding: 5px;
+	margin-top: 10px;
+}
+
+.notice .list{
+	display: flex;
+	flex-direction: column;
+}
+
+.notice .list .item{
+	padding: 5px;
+	line-height: 1.5em;
+	position: relative;
+	padding-left: 33px;
+}
+
+.notice .list .item::before{
+	content:'※';
+	display: block;
+	width: 22px;
+	height: 33px;
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	position: absolute;
+	color: #4aa;
+	padding: 0 5px;
+	left: 0;
 }
 
 /* sidebar */
@@ -161,8 +239,7 @@ label {
 	outline: none;
 }
 
-.sidebar .top .search.searching .search-label
-{
+.sidebar .top .search.searching .search-label {
 	border-color: #5cc;
 	border-radius: 0 10px 0 0;
 }
@@ -239,8 +316,7 @@ label {
 	cursor: pointer;
 }
 
-.sidebar .top .checkboxes .checkbox#adult::before
-{
+.sidebar .top .checkboxes .checkbox#adult::before {
 	margin-left: 0;
 }
 
@@ -304,6 +380,7 @@ label {
 	height: 18px;
 	background-repeat: no-repeat;
 	background-position: center center;
+	background-size: contain;
 	margin: 0 5px 0 15px;
 }
 
@@ -319,22 +396,32 @@ label {
 	background-image: url(../img/time.png);
 }
 
-.sidebar .list .item .schedule-container
-{
+.sidebar .list .item .schedule-container {
 	width: 100%;
-	padding: 15px;
+	padding: 0 15px;
 	display: flex;
-	align-items: center;
 }
 
 .sidebar .list .item .schedule {
 	border: #7be0e5 solid 2px;
-	width: 100%;
+	width: 80%;
+	margin-top: 10px;
+}
+
+.sidebar .list .item .schedule-container::before {
+	content: '';
+	width: 18px;
+	margin-top: 10px;
+	margin-right: 5px;
+	height: 18px;
+	background-repeat: no-repeat;
+	background-position: center left;
+	background-image: url(../img/time.png);
 }
 
 .sidebar .list .item .schedule .th, .sidebar .list .item .schedule .td {
 	text-align: center;
-	padding: 10px 0px;
+	padding: 8px 0px;
 }
 
 .sidebar .list .item .schedule .td {
@@ -363,6 +450,10 @@ label {
 	background-color: #7be0e5;
 }
 
+.sidebar .list .item .note::before {
+	background-image: url(../img/note.png);
+}
+
 /* map */
 
 .map {
@@ -372,7 +463,7 @@ label {
 }
 
 .map .leaflet-popup-content {
-	width: 250px !important;
+	width: 300px !important;
 	display: flex;
 	justify-content: space-around;
 	flex-wrap: wrap;
@@ -380,29 +471,66 @@ label {
 }
 
 .map .leaflet-popup-content .title {
-	font-size: 20px;
-	font-weight: bold;
+	font-size: 24px;
 	width: 100%;
-	padding: 3px;
+	padding-bottom: 5px;
 }
 
-.map .leaflet-popup-content .address {
+.map .leaflet-popup-content .data {
 	width: 100%;
+	display: flex;
+	margin-top: 5px;
 }
 
-.map .leaflet-popup-content .phone {
+.map .leaflet-popup-content .data::before {
+	content: '';
+	display: block;
+	width: 18px;
+	height: 18px;
+	background-repeat: no-repeat;
+	background-position: center center;
+	background-size: contain;
+	margin: 4px 5px 0 15px;
+}
+
+.map .leaflet-popup-content .address::before {
+	background-image: url(../img/address.png);
+}
+
+.map .leaflet-popup-content .phone::before {
+	background-image: url(../img/phone.png);
+}
+
+.map .leaflet-popup-content .time::before {
+	background-image: url(../img/time.png);
+}
+
+.map .leaflet-popup-content .schedule-container {
 	width: 100%;
-	cursor: pointer;
+	padding: 0 0 0 15px;
+	display: flex;
 }
 
 .map .leaflet-popup-content .schedule {
-	margin-top: 10px;
 	border: #7be0e5 solid 2px;
+	width: 80%;
+	margin-top: 10px;
+}
+
+.map .leaflet-popup-content .schedule-container::before {
+	content: '';
+	width: 18px;
+	margin-top: 10px;
+	margin-right: 5px;
+	height: 18px;
+	background-repeat: no-repeat;
+	background-position: center left;
+	background-image: url(../img/time.png);
 }
 
 .map .leaflet-popup-content .schedule .th, .map .leaflet-popup-content .schedule .td {
 	text-align: center;
-	padding: 3px;
+	padding: 8px 0px;
 }
 
 .map .leaflet-popup-content .schedule .td {
@@ -411,16 +539,30 @@ label {
 }
 
 .map .leaflet-popup-content .mask {
+	display: flex;
+	width: 100%;
+	justify-content: center;
+}
+
+.map .leaflet-popup-content .mask .adult, .map .leaflet-popup-content .mask .child {
 	width: 45%;
-	background-color: #ddd;
-	margin-top: 10px;
-	border-radius: 5px;
-	padding: 3px;
+	padding: 5px 10px;
+	margin: 5px;
+	border-radius: 4px;
+	background-color: #b9b9b9;
 	display: flex;
 	justify-content: center;
 }
 
-.map .leaflet-popup-content .mask.true {
+.map .leaflet-popup-content .mask .stock {
+	background-color: #7be0e5;
+}
+
+.map .leaflet-popup-content .note::before {
+	background-image: url(../img/note.png);
+}
+
+.map .leaflet-popup-content .mask .true {
 	background: #7be0e5;
 }
 

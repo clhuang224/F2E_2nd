@@ -20,10 +20,25 @@
 <body>
     <div id="vue" class="wrap">
         <div class="loading" v-if="loading === true">
-
             <div class="loader-inner pacman"></div>
             <div>資料讀取中</div>
         </div>
+        <aside class="notice">
+            <div class="box">
+                <button class="close-button">×</button>
+                <ul class="list">
+                    <div class="title">使用須知</div>
+                    <li class="item">部分藥局因採發放號碼牌方式，方便民眾購買口罩，<strong>系統目前無法顯示已發送號碼牌數量</strong>。</li>
+                    <li class="item">口罩數量以藥局實際存量為主，<strong>線上查詢之數量僅供參考</strong>。</li>
+                    <li class="item">若您的藥局有需要加註的公告事項，可以填寫<a href="https://pse.is/KH7DC">此表單</a>。</li>
+                    <li class="item">填寫的資料會不定期匯出到<a href="https://pse.is/QDSMW">此檔案</a>。</li>
+                </ul>
+                <ul class="list">
+                    <div class="title">資料來源</div>
+                    <li class="item"><a href="https://g0v.hackmd.io/gGrOI4_aTsmpoMfLP1OU4A">口罩供需資訊平台</a></li>
+                </ul>
+            </div>
+        </aside>
         <div class="sidebar" :class="{hide: menuHide === true}">
             <button class="toggle-button" @click="menuHide = !menuHide"></button>
             <div class="top">
@@ -64,15 +79,18 @@
                     @click="focusStore(item)">
                     <h2 class="title">{{item.properties.name}}</h2>
                     <div class="distance" v-if="userMarker !== null">{{item.distance | round}} 公尺</div>
-                    <div class="data address">{{item.properties.address}}</div>
-                    <div class="data phone"><a :href="'tel:'+item.properties.phone">{{item.properties.phone}}</a>
-                    </div>
                     <div class="mask">
                         <div class="adult" :class="{stock: item.properties.mask_adult > 0}">
                             成人口罩：<span>{{item.properties.mask_adult}}</span></div>
                         <div class="child" :class="{stock: item.properties.mask_child > 0}">
                             兒童口罩：<span>{{item.properties.mask_child}}</span></div>
                     </div>
+                    <div class="data address">{{item.properties.address}}
+                    </div>
+                    <div class="data phone"><a :href="'tel:'+item.properties.phone">{{item.properties.phone}}</a>
+                    </div>
+                    <div class="schedule-container" v-html="item.properties.schedule"></div>
+                    <div class="data note" v-if="item.properties.note !== '-'">{{item.properties.note}}</div>
                 </li>
             </ul>
         </div>
