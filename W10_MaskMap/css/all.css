@@ -368,7 +368,6 @@ label {
 .sidebar .list .data {
 	width: auto;
 	display: flex;
-	align-items: center;
 	margin-top: 10px;
 	font-size: 18px;
 }
@@ -381,7 +380,7 @@ label {
 	background-repeat: no-repeat;
 	background-position: center center;
 	background-size: contain;
-	margin: 0 5px 0 15px;
+	margin: 0px 5px 0 15px;
 }
 
 .sidebar .list .address::before {
@@ -406,6 +405,8 @@ label {
 	border: #7be0e5 solid 2px;
 	width: 80%;
 	margin-top: 10px;
+	border-collapse: separate;
+	border-radius: 10px;
 }
 
 .sidebar .list .item .schedule-container::before {
@@ -513,8 +514,10 @@ label {
 
 .map .leaflet-popup-content .schedule {
 	border: #7be0e5 solid 2px;
-	width: 80%;
+	width: 90%;
 	margin-top: 10px;
+	border-collapse: separate;
+	border-radius: 10px;
 }
 
 .map .leaflet-popup-content .schedule-container::before {
@@ -528,14 +531,15 @@ label {
 	background-image: url(../img/time.png);
 }
 
-.map .leaflet-popup-content .schedule .th, .map .leaflet-popup-content .schedule .td {
+.map .leaflet-popup-content .schedule .th{
 	text-align: center;
-	padding: 8px 0px;
+	padding: 6px 0px;
 }
 
 .map .leaflet-popup-content .schedule .td {
 	color: #7be0e5;
 	font-weight: bold;
+	padding: 6px 3px;
 }
 
 .map .leaflet-popup-content .mask {

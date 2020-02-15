@@ -201,7 +201,7 @@ let vue = new Vue({
             this.map = L.map('map', {
                 center: [23.6334772, 120.852944],
                 zoom: 7,
-                maxBounds: L.latLngBounds(L.latLng(27, 115), L.latLng(20, 127)),
+                maxBounds: L.latLngBounds(L.latLng(28, 115), L.latLng(20, 127)),
                 minZoom: 7,
                 zoomControl: false
             });
