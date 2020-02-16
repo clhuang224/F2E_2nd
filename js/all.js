@@ -48,6 +48,16 @@ let data = [
         workURL: './W5_Game/',
         codeURL: 'https://github.com/clhuang224/F2E_2nd/tree/master/W5_Game',
         imageURL: 'img/w5.png',
+    },
+    {
+        week: 10,
+        tab: 'W10 MaskMap',
+        title: '第十關： 口罩地圖',
+        introURL: 'https://challenge.thef2e.com/news/21',
+        articleURL: 'https://clhuang224.github.io/TechBlog/2020/02/16/20200216-f2e-2-w10-MaskMap/',
+        workURL: './W10_MaskMap/',
+        codeURL: 'https://github.com/clhuang224/F2E_2nd/tree/master/W10_MaskMap',
+        imageURL: 'img/w10.png',
     }
 ];
 
