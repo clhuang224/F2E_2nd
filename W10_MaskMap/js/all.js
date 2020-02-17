@@ -4,7 +4,7 @@ let vue = new Vue({
         loading: true,
         map: null,
         userMarker: null,
-        stroeMarkers: null,
+        storeMarkers: null,
         /**
          * 地圖中心的緯經度
          */
@@ -121,9 +121,6 @@ let vue = new Vue({
          * 2. 產生營業時間表格字串
          * 3. 呼叫 addMarkers()
          * 4. loading = false
-         * @param {Number} a a 點的緯經度
-         * @param {Number} b b 點的緯經度
-         * @returns {Number} a 、 b 兩點的距離（公尺）
          */
         getData: function () {
             let that = this;
