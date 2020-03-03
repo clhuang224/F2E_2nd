@@ -90,7 +90,7 @@
                     </div>
                     <div class="data phone"><a :href="'tel:'+item.properties.phone">{{item.properties.phone}}</a>
                     </div>
-                    <div class="schedule-container" v-html="item.properties.schedule"></div>
+                    <div class="data schedule-container" v-html="item.properties.schedule"></div>
                     <div class="data note" v-if="item.properties.note !== '-'">{{item.properties.note}}</div>
                 </li>
             </ul>

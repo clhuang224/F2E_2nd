@@ -303,7 +303,7 @@ let vue = new Vue({
                 </div>
                 <div class="data address">${item.properties.address}</div>
                 <div class="data phone"><a href="tel:${item.properties.phone}">${item.properties.phone}</a></div>
-                <div class="schedule-container">${item.properties.schedule}</div>`;
+                <div class="data schedule-container">${item.properties.schedule}</div>`;
             if (item.properties.note !== '-') {
                 result += `<div class="data note">${item.properties.note}</div>`;
             }
